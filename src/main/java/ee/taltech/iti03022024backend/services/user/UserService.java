@@ -2,6 +2,8 @@ package ee.taltech.iti03022024backend.services.user;
 
 import ee.taltech.iti03022024backend.dto.user.UserDto;
 import ee.taltech.iti03022024backend.entities.user.UserEntity;
+import ee.taltech.iti03022024backend.exceptions.NotFoundException;
+import ee.taltech.iti03022024backend.exceptions.UnfilledFieldException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +18,24 @@ public class UserService {
     private final UserMapper userMapper;
 
     public void createUser(UserDto userDto) {
+        if (userDto.getUsername() == null || userDto.getEmail() == null || userDto.getPassword() == null) {
+            throw new UnfilledFieldException("Please fill out all fields");
+        }
         userRepository.save(userMapper.toEntity(userDto));
     }
 
     public Optional<UserDto> findUser(long id) {
         Optional<UserEntity> userOptional = userRepository.findById(id);
-        return userOptional.map(userMapper::toDto); // Returns Optional.empty if optional is not present, otherwise maps it to dto
+        if (userOptional.isPresent()) {
+            return userOptional.map(userMapper::toDto);
+        }
+        throw new NotFoundException("User does not exist");
     }
 
-    public Optional<UserDto> updateUser(long id, UserDto userDto) {
+    public void updateUser(long id, UserDto userDto) {
+        if (userDto.getUsername() == null || userDto.getEmail() == null || userDto.getPassword() == null) {
+            throw new UnfilledFieldException("Please fill out all fields");
+        }
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
             UserEntity user = userEntity.get();
@@ -32,17 +43,18 @@ public class UserService {
             user.setPassword(userDto.getPassword());
             user.setUsername(userDto.getUsername());
             userRepository.save(user);
-            return Optional.of(userMapper.toDto(user));
+            userMapper.toDto(user);
+        } else {
+            throw new NotFoundException("Cannot update a user that does not exist");
         }
-        return Optional.empty();
     }
 
-    public Optional<UserDto> deleteUser(long id) {
+    public void deleteUser(long id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
             userRepository.deleteById(id);
-            return Optional.of(userMapper.toDto(userEntity.get()));
+        } else {
+            throw new NotFoundException("Cannot delete a user that does not exist");
         }
-        return Optional.empty();
     }
 }
