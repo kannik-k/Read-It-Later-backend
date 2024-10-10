@@ -23,4 +23,26 @@ public class UserService {
         Optional<UserEntity> userOptional = userRepository.findById(id);
         return userOptional.map(userMapper::toDto); // Returns Optional.empty if optional is not present, otherwise maps it to dto
     }
+
+    public Optional<UserDto> updateUser(long id, UserDto userDto) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isPresent()) {
+            UserEntity user = userEntity.get();
+            user.setEmail(userDto.getEmail());
+            user.setPassword(userDto.getPassword());
+            user.setUsername(userDto.getUsername());
+            userRepository.save(user);
+            return Optional.of(userMapper.toDto(user));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<UserDto> deleteUser(long id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isPresent()) {
+            userRepository.deleteById(id);
+            return Optional.of(userMapper.toDto(userEntity.get()));
+        }
+        return Optional.empty();
+    }
 }
