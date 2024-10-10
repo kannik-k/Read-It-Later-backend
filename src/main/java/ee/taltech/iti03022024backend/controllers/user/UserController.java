@@ -30,19 +30,13 @@ public class UserController {
 
     @PutMapping("{id}") // May split into different parts in the future
     public ResponseEntity<Void> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
-        Optional<UserDto> user = userService.updateUser(id, userDto);
-        if (user.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        userService.updateUser(id, userDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id) {
-        Optional<UserDto> user = userService.deleteUser(id);
-        if (user.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
