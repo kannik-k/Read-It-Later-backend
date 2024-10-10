@@ -17,7 +17,7 @@ public class ErrorHandler {
      * Handles uncaught exceptions.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleException(Exception ex) {
+    public ResponseEntity<ExceptionResponse> handleException(Exception ex) {
         log.error("Internal server error", ex);
         return new ResponseEntity<>(new ExceptionResponse("Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
