@@ -45,7 +45,7 @@ deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - ssh -o StrictHostKeyChecking=no user@your-server-ip "
+    - ssh -o StrictHostKeyChecking=no user@193.40.255.40 "
       cd /path/to/your/project &&
       docker-compose pull &&
       docker-compose up -d --remove-orphans"
