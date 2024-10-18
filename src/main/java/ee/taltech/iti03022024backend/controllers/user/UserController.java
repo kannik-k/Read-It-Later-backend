@@ -20,6 +20,11 @@ public class UserController {
         userService.createUser(userDto);
     }
 
+    @GetMapping()
+    public String hello() {
+        return "HELLO WORLD!!!!";
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
         Optional<UserDto> user = userService.findUser(id);
