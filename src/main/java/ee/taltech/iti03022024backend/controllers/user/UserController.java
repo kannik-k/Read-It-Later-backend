@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping()
     public String hello() {
-        return "HELLO WORLD!!!!";
+        return "HELLO WORLD!!!";
     }
 
     @GetMapping("{id}")
