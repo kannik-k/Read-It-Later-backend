@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web-project:
+    image: aetkadi/iti0302-2024-backend:latest
+    container_name: iti0302-2024-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - /iti0302/backend/application.properties:/app/application.properties
+
+volumes:
+  postgres_data:
