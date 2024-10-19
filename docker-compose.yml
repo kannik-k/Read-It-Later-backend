@@ -10,6 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - /iti0302/backend/application.properties:/app/application.properties
 
   web-project:
     image: aetkadi/iti0302-2024-backend:latest
