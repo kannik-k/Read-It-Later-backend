@@ -47,5 +47,6 @@ deploy:
   script:
     - ssh -o StrictHostKeyChecking=no ubuntu@193.40.255.40 "
       cd /home/ubuntu/iti0302/backend &&
-      docker compose pull &&
-      docker compose up -d --remove-orphans"
+      docker-compose pull &&
+      docker-compose down &&
+      docker-compose up -d"
