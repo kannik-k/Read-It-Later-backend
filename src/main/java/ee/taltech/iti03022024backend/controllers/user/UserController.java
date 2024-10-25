@@ -22,15 +22,13 @@ public class UserController {
 
     @GetMapping()
     public String hello() {
-        return "HELLO WORLD, JUHUUU!!! IMELINE!!!";
+        return "Welcome to Read It Later!!!";
     }
 
     @GetMapping("get/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
-        Optional<UserDto> user = userService.findUser(id);
-        return user
-                .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        UserDto userDto = userService.findUser(id);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @PutMapping("put/{id}") // May split into different parts in the future
