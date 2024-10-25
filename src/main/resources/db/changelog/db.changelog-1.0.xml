@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,5 +10,15 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro
         http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-    <include file="db/changelog/db.changelog-1.0.xml"/>
+    
+    <changeSet id="25-10-2024 Add user table" author="Aet-Kadi Kald">
+        <createTable tableName="user">
+            <column name="user_id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="text"/>
+            <column name="password" type="text"/>
+            <column name="email" type="text"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
