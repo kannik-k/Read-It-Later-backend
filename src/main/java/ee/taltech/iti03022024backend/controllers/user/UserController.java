@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping()
+    @PostMapping("post")
     public void createUser(@RequestBody UserDto userDto) {
         userService.createUser(userDto);
     }
@@ -25,7 +25,7 @@ public class UserController {
         return "HELLO WORLD, JUHUUU!!! IMELINE!!!";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
         Optional<UserDto> user = userService.findUser(id);
         return user
@@ -33,13 +33,13 @@ public class UserController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("{id}") // May split into different parts in the future
+    @PutMapping("put/{id}") // May split into different parts in the future
     public ResponseEntity<Void> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
         userService.updateUser(id, userDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
