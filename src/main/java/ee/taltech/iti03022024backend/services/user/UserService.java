@@ -24,37 +24,24 @@ public class UserService {
         userRepository.save(userMapper.toEntity(userDto));
     }
 
-    public Optional<UserDto> findUser(long id) {
-        Optional<UserEntity> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            return userOptional.map(userMapper::toDto);
-        }
-        throw new NotFoundException("User does not exist");
+    public UserDto findUser(long id) throws NotFoundException {
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User does not exist"));
+        return userMapper.toDto(user);
     }
 
     public void updateUser(long id, UserDto userDto) {
         if (userDto.getUsername() == null || userDto.getEmail() == null || userDto.getPassword() == null) {
             throw new UnfilledFieldException("Please fill out all fields");
         }
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity.isPresent()) {
-            UserEntity user = userEntity.get();
-            user.setEmail(userDto.getEmail());
-            user.setPassword(userDto.getPassword());
-            user.setUsername(userDto.getUsername());
-            userRepository.save(user);
-            userMapper.toDto(user);
-        } else {
-            throw new NotFoundException("Cannot update a user that does not exist");
-        }
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
+        userEntity.setEmail(userDto.getEmail());
+        userEntity.setPassword(userDto.getPassword());
+        userEntity.setUsername(userDto.getUsername());
+        userRepository.save(userEntity);
     }
 
-    public void deleteUser(long id) {
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (userEntity.isPresent()) {
-            userRepository.deleteById(id);
-        } else {
-            throw new NotFoundException("Cannot delete a user that does not exist");
-        }
+    public void deleteUser(long id) throws NotFoundException {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot delete a user that does not exist"));
+        userRepository.delete(userEntity);
     }
 }
