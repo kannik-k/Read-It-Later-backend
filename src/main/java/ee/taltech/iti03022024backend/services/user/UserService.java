@@ -1,6 +1,7 @@
 package ee.taltech.iti03022024backend.services.user;
 
-import ee.taltech.iti03022024backend.dto.user.UserDto;
+import ee.taltech.iti03022024backend.dto.user.UserDtoIn;
+import ee.taltech.iti03022024backend.dto.user.UserDtoOut;
 import ee.taltech.iti03022024backend.entities.user.UserEntity;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.exceptions.UnfilledFieldException;
@@ -9,7 +10,7 @@ import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -17,27 +18,34 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public void createUser(UserDto userDto) {
-        if (userDto.getUsername() == null || userDto.getEmail() == null || userDto.getPassword() == null) {
+    public UserDtoOut createUser(UserDtoIn userDtoIn) {
+        if (userDtoIn.getUsername() == null || userDtoIn.getEmail() == null || userDtoIn.getPassword() == null) {
             throw new UnfilledFieldException("Please fill out all fields");
         }
-        userRepository.save(userMapper.toEntity(userDto));
+        UserEntity userEntity = userMapper.toEntity(userDtoIn);
+        userRepository.save(userEntity);
+        return userMapper.toDto(userEntity);
     }
 
-    public UserDto findUser(long id) throws NotFoundException {
+    public List<UserDtoOut> getAllUsers() {
+        return userMapper.toDtoList(userRepository.findAll());
+    }
+
+    public UserDtoOut findUser(long id) throws NotFoundException {
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User does not exist"));
         return userMapper.toDto(user);
     }
 
-    public void updateUser(long id, UserDto userDto) {
-        if (userDto.getUsername() == null || userDto.getEmail() == null || userDto.getPassword() == null) {
+    public UserDtoOut updateUser(long id, UserDtoIn userDtoIn) {
+        if (userDtoIn.getUsername() == null || userDtoIn.getEmail() == null || userDtoIn.getPassword() == null) {
             throw new UnfilledFieldException("Please fill out all fields");
         }
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
-        userEntity.setEmail(userDto.getEmail());
-        userEntity.setPassword(userDto.getPassword());
-        userEntity.setUsername(userDto.getUsername());
+        userEntity.setEmail(userDtoIn.getEmail());
+        userEntity.setPassword(userDtoIn.getPassword());
+        userEntity.setUsername(userDtoIn.getUsername());
         userRepository.save(userEntity);
+        return userMapper.toDto(userEntity);
     }
 
     public void deleteUser(long id) throws NotFoundException {
