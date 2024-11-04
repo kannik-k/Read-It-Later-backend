@@ -21,4 +21,88 @@
             <column name="email" type="text"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="4-11-2024 Add genre table" author="Karoliina Kannik">
+        <createTable tableName="genre">
+            <column name="genre_id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="genre" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4-11-2024 Insert genres" author="Karoliina Kannik">
+        <insert tableName="genre">
+            <column name="genre" value="Fiction"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Mystery"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Science Fiction"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Non-fiction"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Romance"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Self-help"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Historical"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Thriller"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Biography"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Comedy"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Fantasy"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Poetry"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Contemporary"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Young Adult"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Adult"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Children’s"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Graphic novel"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Science"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Psychological"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Adventure"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Horror"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Short story"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Travel"/>
+        </insert>
+        <insert tableName="genre">
+            <column name="genre" value="Religion"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
