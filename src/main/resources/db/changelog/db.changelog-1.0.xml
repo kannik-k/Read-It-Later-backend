@@ -75,9 +75,6 @@
             <column name="genre" value="Young Adult"/>
         </insert>
         <insert tableName="genre">
-            <column name="genre" value="Adult"/>
-        </insert>
-        <insert tableName="genre">
             <column name="genre" value="Children’s"/>
         </insert>
         <insert tableName="genre">
