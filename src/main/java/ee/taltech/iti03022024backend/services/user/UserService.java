@@ -3,6 +3,7 @@ package ee.taltech.iti03022024backend.services.user;
 import ee.taltech.iti03022024backend.dto.user.UserDtoIn;
 import ee.taltech.iti03022024backend.dto.user.UserDtoOut;
 import ee.taltech.iti03022024backend.entities.user.UserEntity;
+import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.exceptions.UnfilledFieldException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
@@ -21,6 +22,9 @@ public class UserService {
     public UserDtoOut createUser(UserDtoIn userDtoIn) {
         if (userDtoIn.getUsername() == null || userDtoIn.getEmail() == null || userDtoIn.getPassword() == null) {
             throw new UnfilledFieldException("Please fill out all fields");
+        }
+        if (userRepository.existsByUsername(userDtoIn.getUsername())) {
+            throw new NameAlreadyExistsException("Username already exists");
         }
         UserEntity userEntity = userMapper.toEntity(userDtoIn);
         userRepository.save(userEntity);
