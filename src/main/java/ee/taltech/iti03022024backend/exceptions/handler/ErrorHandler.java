@@ -1,5 +1,6 @@
 package ee.taltech.iti03022024backend.exceptions.handler;
 
+import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.UnfilledFieldException;
 import ee.taltech.iti03022024backend.exceptions.response.ExceptionResponse;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
@@ -35,6 +36,11 @@ public class ErrorHandler {
      */
     @ExceptionHandler(UnfilledFieldException.class)
     public ResponseEntity<ExceptionResponse> handleUnfilledFieldException(Exception ex) {
+        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NameAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleNameAlreadyExistsException(Exception ex) {
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
