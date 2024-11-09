@@ -3,6 +3,7 @@ package ee.taltech.iti03022024backend.services.wishList;
 import ee.taltech.iti03022024backend.dto.wishList.WishListDtoIn;
 import ee.taltech.iti03022024backend.dto.wishList.WishListDtoOut;
 import ee.taltech.iti03022024backend.entities.wishList.WishListEntity;
+import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.mappers.wishList.WishListMapper;
 import ee.taltech.iti03022024backend.repositories.wishList.WishListRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class WishListService {
     private final WishListRepository wishListRepository;
 
     public WishListDtoOut addToWishList(WishListDtoIn wishListDtoIn) {
+        if (wishListRepository.existsByUserIdAndBookId(wishListDtoIn.getUserId(), wishListDtoIn.getBookId())) {
+            throw new NameAlreadyExistsException("User already has book in wish list.");
+        }
+
         WishListEntity wishListEntity = wishListMapper.toEntity(wishListDtoIn);
         wishListRepository.save(wishListEntity);
         return wishListMapper.toDto(wishListEntity);
