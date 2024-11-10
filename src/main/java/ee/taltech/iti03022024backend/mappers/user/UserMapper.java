@@ -6,7 +6,6 @@ import ee.taltech.iti03022024backend.entities.user.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)

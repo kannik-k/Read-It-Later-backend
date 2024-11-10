@@ -119,4 +119,20 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="9-11-2024 Add wish list table" author="Karoliina Kannik">
+        <createTable tableName="wish_list">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="serial">
+                <constraints nullable="false" foreignKeyName="user_id" referencedTableName="user"
+                             referencedColumnNames="user_id"/>
+            </column>
+            <column name="book_id" type="serial">
+                <constraints nullable="false" foreignKeyName="book_id" referencedTableName="books"
+                             referencedColumnNames="book_id"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
