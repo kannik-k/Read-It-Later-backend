@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class BookDtoIn {
     @NotNull
-    @Size(min = 10, max = 75, message = "must be 10-75 characters long")
+    @Size(min = 2, max = 75, message = "must be 10-75 characters long")
     private String title;
     @NotNull
     @Size(min = 5, max = 30, message = "must be 5-30 characters long")
