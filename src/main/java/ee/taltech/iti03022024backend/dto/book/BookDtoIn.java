@@ -12,5 +12,6 @@ public class BookDtoIn {
     @NotNull
     @Size(min = 5, max = 30, message = "must be 5-30 characters long")
     private String author;
+    @NotNull
     private Long genreId;
 }
