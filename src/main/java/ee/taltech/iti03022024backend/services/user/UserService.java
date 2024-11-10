@@ -20,9 +20,6 @@ public class UserService {
     private final UserMapper userMapper;
 
     public UserDtoOut createUser(UserDtoIn userDtoIn) {
-        if (userDtoIn.getUsername() == null || userDtoIn.getEmail() == null || userDtoIn.getPassword() == null) {
-            throw new UnfilledFieldException("Please fill out all fields");
-        }
         if (userRepository.existsByUsername(userDtoIn.getUsername())) {
             throw new NameAlreadyExistsException("Username already exists");
         }
@@ -41,9 +38,6 @@ public class UserService {
     }
 
     public UserDtoOut updateUser(long id, UserDtoIn userDtoIn) {
-        if (userDtoIn.getUsername() == null || userDtoIn.getEmail() == null || userDtoIn.getPassword() == null) {
-            throw new UnfilledFieldException("Please fill out all fields");
-        }
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
         userEntity.setEmail(userDtoIn.getEmail());
         userEntity.setPassword(userDtoIn.getPassword());
