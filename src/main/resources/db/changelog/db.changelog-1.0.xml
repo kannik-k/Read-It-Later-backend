@@ -135,4 +135,17 @@
             </column>
         </createTable>
     </changeSet>
+    
+    <changeSet id="10-11-2024 Add review table" author="Karoliina Kannik">
+        <createTable tableName="review">
+            <column name="review_id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="book_id" type="serial">
+                <constraints nullable="false" foreignKeyName="book_id_review" referencedTableName="books"
+                             referencedColumnNames="book_id"/>
+            </column>
+            <column name="review" type="varchar"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
