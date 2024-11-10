@@ -46,6 +46,16 @@ public class UserService {
         return userMapper.toDto(userEntity);
     }
 
+    public UserDtoOut updateUserUsername(long id, UserDtoIn userDtoIn) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
+        if (userRepository.existsByUsername(userDtoIn.getUsername())) {
+            throw new NameAlreadyExistsException("Username already exists");
+        }
+        userEntity.setUsername(userDtoIn.getUsername());
+        userRepository.save(userEntity);
+        return userMapper.toDto(userEntity);
+    }
+
     public void deleteUser(long id) throws NotFoundException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot delete a user that does not exist"));
         userRepository.delete(userEntity);

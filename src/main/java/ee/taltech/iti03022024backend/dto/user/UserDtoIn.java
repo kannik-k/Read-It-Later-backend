@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 public class UserDtoIn { // Client sends to server
     @NotNull
-    @Size(min = 5, max = 15, message = "should be 5-15 characters long")
+    @Size(min = 5, max = 15, message = "Username should be 5-15 characters long.")
     private String username;
     @NotNull
-    @Size(min = 8, max = 15, message = "should be 8-15 characters long")
+    @Size(min = 8, max = 15, message = "Password should be 8-15 characters long.")
     private String password;
     @NotNull
     @NotBlank
