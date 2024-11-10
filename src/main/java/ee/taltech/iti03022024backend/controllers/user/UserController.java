@@ -3,6 +3,7 @@ package ee.taltech.iti03022024backend.controllers.user;
 import ee.taltech.iti03022024backend.dto.user.UserDtoIn;
 import ee.taltech.iti03022024backend.dto.user.UserDtoOut;
 import ee.taltech.iti03022024backend.services.user.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("post")
-    public ResponseEntity<UserDtoOut> createUser(@RequestBody UserDtoIn userDtoIn) {
+    public ResponseEntity<UserDtoOut> createUser(@Valid @RequestBody UserDtoIn userDtoIn) {
         UserDtoOut userDtoOut = userService.createUser(userDtoIn);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("put/{id}") // May split into different parts in the future
-    public ResponseEntity<UserDtoOut> updateUser(@PathVariable long id, @RequestBody UserDtoIn userDtoIn) {
+    public ResponseEntity<UserDtoOut> updateUser(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) {
         UserDtoOut userDtoOut = userService.updateUser(id, userDtoIn);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }

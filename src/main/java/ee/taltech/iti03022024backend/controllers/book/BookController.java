@@ -3,6 +3,7 @@ package ee.taltech.iti03022024backend.controllers.book;
 import ee.taltech.iti03022024backend.dto.book.BookDtoIn;
 import ee.taltech.iti03022024backend.dto.book.BookDtoOut;
 import ee.taltech.iti03022024backend.services.book.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class BookController {
 
     //POST
     @PostMapping("post")
-    public ResponseEntity<BookDtoOut> createBook(@RequestBody BookDtoIn bookDtoIn) {
+    public ResponseEntity<BookDtoOut> createBook(@Valid @RequestBody BookDtoIn bookDtoIn) {
         BookDtoOut book = bookService.createBook(bookDtoIn);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
