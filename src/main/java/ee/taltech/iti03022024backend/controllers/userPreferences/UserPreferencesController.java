@@ -6,14 +6,13 @@ import ee.taltech.iti03022024backend.services.userPreferences.UserPreferencesSer
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api/user_preferences")
-@Controller
+@RestController
 public class UserPreferencesController {
 
     private final UserPreferencesService userPreferencesService;
