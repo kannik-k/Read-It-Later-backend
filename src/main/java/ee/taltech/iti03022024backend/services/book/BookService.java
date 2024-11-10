@@ -22,9 +22,6 @@ public class BookService {
     private final BookMapper bookMapper;
 
     public BookDtoOut createBook(BookDtoIn bookDtoIn) {
-        if(bookDtoIn.getTitle() == null || bookDtoIn.getAuthor() == null || bookDtoIn.getGenreId() == null) {
-            throw new UnfilledFieldException("Please fill out all fields");
-        }
         BookEntity bookEntity = bookMapper.toEntity(bookDtoIn);
         bookRepository.save(bookEntity);
         return bookMapper.toDto(bookEntity);
