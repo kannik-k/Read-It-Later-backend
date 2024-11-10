@@ -135,7 +135,23 @@
             </column>
         </createTable>
     </changeSet>
-    
+
+    <changeSet id="10-11-2024 Add user preferences table" author="Karoliina Kannik">
+        <createTable tableName="user_preferences">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="serial">
+                <constraints nullable="false" foreignKeyName="user_id" referencedTableName="user"
+                             referencedColumnNames="user_id"/>
+            </column>
+            <column name="genre_id" type="serial">
+                <constraints nullable="false" foreignKeyName="genre_id" referencedTableName="genre"
+                             referencedColumnNames="genre_id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
     <changeSet id="10-11-2024 Add review table" author="Karoliina Kannik">
         <createTable tableName="review">
             <column name="review_id" type="serial" autoIncrement="true">

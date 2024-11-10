@@ -6,14 +6,13 @@ import ee.taltech.iti03022024backend.services.wishList.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api/wish_list")
-@Controller
+@RestController
 public class WishListController {
 
     private final WishListService wishListService;
