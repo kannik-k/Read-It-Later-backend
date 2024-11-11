@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("post")
-    public ResponseEntity<UserDtoOut> createUser(@Valid @RequestBody UserDtoIn userDtoIn) throws NameAlreadyExistsException {
+    public ResponseEntity<UserDtoOut> createUser(@Valid @RequestBody UserDtoIn userDtoIn) {
         UserDtoOut userDtoOut = userService.createUser(userDtoIn);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
@@ -38,31 +38,31 @@ public class UserController {
     }
 
     @GetMapping("get/{id}")
-    public ResponseEntity<UserDtoOut> getUserById(@PathVariable long id) throws NotFoundException {
+    public ResponseEntity<UserDtoOut> getUserById(@PathVariable long id) {
         UserDtoOut userDtoOut = userService.findUser(id);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
     @PutMapping("/put/{id}/username")
-    public ResponseEntity<UserDtoOut> updateUserUsername(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) throws NotFoundException, NameAlreadyExistsException {
+    public ResponseEntity<UserDtoOut> updateUserUsername(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) {
         UserDtoOut userDtoOut = userService.updateUserUsername(id, userDtoIn);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
     @PutMapping("put/{id}/email")
-    public ResponseEntity<UserDtoOut> updateUserEmail(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) throws NotFoundException {
+    public ResponseEntity<UserDtoOut> updateUserEmail(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) {
         UserDtoOut userDtoOut = userService.updateUserEmail(id, userDtoIn);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
     @PutMapping("put/{id}/password")
-    public ResponseEntity<UserDtoOut> updateUserPassword(@PathVariable long id, @Valid @RequestBody UserPasswordChangeWrapper userPasswordChangeWrapper) throws NotFoundException, IncorrectInputException {
+    public ResponseEntity<UserDtoOut> updateUserPassword(@PathVariable long id, @Valid @RequestBody UserPasswordChangeWrapper userPasswordChangeWrapper) {
         UserDtoOut userDtoOut = userService.updateUserPassword(id, userPasswordChangeWrapper);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable long id) throws NotFoundException {
+    public ResponseEntity<Void> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
