@@ -7,7 +7,6 @@ import ee.taltech.iti03022024backend.entities.user.UserEntity;
 import ee.taltech.iti03022024backend.exceptions.IncorrectInputException;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
-import ee.taltech.iti03022024backend.exceptions.UnfilledFieldException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ import java.util.Objects;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
     public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException {
         if (userRepository.existsByUsername(userDtoIn.getUsername())) {
@@ -41,7 +41,7 @@ public class UserService {
     }
 
     public UserDtoOut updateUserUsername(long id, UserDtoIn userDtoIn) throws NotFoundException, NameAlreadyExistsException {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
         if (userRepository.existsByUsername(userDtoIn.getUsername())) {
             throw new NameAlreadyExistsException("Username already exists");
         }
@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public UserDtoOut updateUserEmail(long id, UserDtoIn userDtoIn) throws NotFoundException {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
         userEntity.setEmail(userDtoIn.getEmail());
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
@@ -59,7 +59,7 @@ public class UserService {
 
     // Later: passwordEncoder should be used here
     public UserDtoOut updateUserPassword(long id, UserPasswordChangeWrapper userPasswordChangeWrapper) throws NotFoundException, IncorrectInputException {
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot update a user that does not exist"));
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
         if (!Objects.equals(userPasswordChangeWrapper.getOldPassword(), userEntity.getPassword())) {
             throw new IncorrectInputException("Old password is incorrect");
         } else if (!Objects.equals(userPasswordChangeWrapper.getNewPassword(), userPasswordChangeWrapper.getConfirmNewPassword())) {
