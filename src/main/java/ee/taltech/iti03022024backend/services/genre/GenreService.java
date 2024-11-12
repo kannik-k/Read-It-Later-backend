@@ -20,9 +20,9 @@ public class GenreService {
         return genreMapper.toDtoList(genreRepository.findAll());
     }
 
-    public GenreDto getGenreById(long id) throws NotFoundException {
+    public String getGenreById(long id) throws NotFoundException {
         GenreEntity genre = genreRepository.findById(id).orElseThrow(() -> new NotFoundException("Genre does not exist"));
-        return genreMapper.toDto(genre);
+        return genre.getGenre();
     }
 
     public GenreDto getGenreByName(String name) throws NotFoundException {
