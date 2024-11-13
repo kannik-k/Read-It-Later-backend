@@ -7,5 +7,5 @@ public class BookDtoOut {
     private long bookId;
     private String title;
     private String author;
-    private Long genreId;
+    private String genre;
 }

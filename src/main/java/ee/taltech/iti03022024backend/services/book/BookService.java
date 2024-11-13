@@ -1,5 +1,6 @@
 package ee.taltech.iti03022024backend.services.book;
 
+import ee.taltech.iti03022024backend.controllers.genre.GenreController;
 import ee.taltech.iti03022024backend.dto.book.BookDtoIn;
 import ee.taltech.iti03022024backend.dto.book.BookDtoOut;
 import ee.taltech.iti03022024backend.entities.book.BookEntity;
@@ -20,16 +21,26 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final GenreController genreController;
 
     public BookDtoOut createBook(BookDtoIn bookDtoIn) {
         BookEntity bookEntity = bookMapper.toEntity(bookDtoIn);
         bookRepository.save(bookEntity);
-        return bookMapper.toDto(bookEntity);
+        String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
+        BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+        bookDtoOut.setGenre(bookGenre);
+
+        return bookDtoOut;
     }
 
     public BookDtoOut getBookById(Long id) throws NotFoundException{
         BookEntity bookEntity = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found"));
-        return bookMapper.toDto(bookEntity);
+        String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
+
+        BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+        bookDtoOut.setGenre(bookGenre);
+
+        return bookDtoOut;
     }
 
     public List<BookDtoOut> getBooks() {
@@ -41,8 +52,16 @@ public class BookService {
         List<BookEntity> bookEntities = bookRepository.findAll().stream()
                 .filter(book -> genreId.equals(book.getGenreId()))
                 .sorted(Comparator.comparing(BookEntity::getTitle))
+                .toList();
+
+        return bookEntities.stream()
+                .map(bookEntity -> {
+                    BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+                    String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
+                    bookDtoOut.setGenre(bookGenre);
+                    return bookDtoOut;
+                })
                 .collect(Collectors.toList());
-        return bookMapper.toDtoList(bookEntities);
     }
 
     public void deleteBook(long id) throws NotFoundException {
