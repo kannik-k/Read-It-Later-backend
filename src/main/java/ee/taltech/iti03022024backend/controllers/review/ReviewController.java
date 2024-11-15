@@ -16,13 +16,13 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("post")
+    @PostMapping()
     public ResponseEntity<ReviewDtoIn> createReview(@Valid @RequestBody ReviewDtoIn reviewDtoIn) {
         ReviewDtoIn review = reviewService.createReview(reviewDtoIn);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
-    @GetMapping("get/{bookId}")
+    @GetMapping("{bookId}")
     public ResponseEntity<List<ReviewDtoIn>> getReview(@PathVariable Long bookId) {
         List<ReviewDtoIn> reviews = reviewService.getBookReviews(bookId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);

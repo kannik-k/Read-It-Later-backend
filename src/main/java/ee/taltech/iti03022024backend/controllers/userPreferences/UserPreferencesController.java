@@ -17,19 +17,19 @@ public class UserPreferencesController {
 
     private final UserPreferencesService userPreferencesService;
 
-    @PostMapping("post")
+    @PostMapping()
     public ResponseEntity<UserPreferencesDtoOut> addGenre(@RequestBody UserPreferencesDtoIn userPreferencesDtoIn) {
         UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesService.addGenre(userPreferencesDtoIn);
         return new ResponseEntity<>(userPreferencesDtoOut, HttpStatus.OK);
     }
 
-    @GetMapping("get/{userId}")
+    @GetMapping("{userId}")
     public ResponseEntity<List<UserPreferencesDtoOut>> getUserPreferences(@PathVariable Long userId) {
         List<UserPreferencesDtoOut> listOfPreferences = userPreferencesService.getGenres(userId);
         return new ResponseEntity<>(listOfPreferences, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{userId}/{genreId}")
+    @DeleteMapping("{userId}/{genreId}")
     public ResponseEntity<Void> deleteGenre(@PathVariable Long userId, @PathVariable Long genreId) {
         userPreferencesService.deleteGenre(userId, genreId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
