@@ -45,11 +45,4 @@ public class BookController {
         List<BookDtoOut> bookList = bookService.getBooksByGenre(genreId);
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
-
-    //DELETE
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable long id) {
-        bookService.deleteBook(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }
