@@ -15,18 +15,18 @@ import java.util.List;
 public class GenreController {
     private final GenreService genreService;
 
-    @GetMapping("get")
+    @GetMapping()
     public List<GenreDto> getGenres() {
         return genreService.getAllGenres();
     }
 
-    @GetMapping("getById/{id}")
-    public ResponseEntity<GenreDto> getGenreById(@PathVariable long id) {
-        GenreDto genreDto = genreService.getGenreById(id);
-        return new ResponseEntity<>(genreDto, HttpStatus.OK);
+    @GetMapping("searchById/{id}")
+    public ResponseEntity<String> getGenreById(@PathVariable long id) {
+        String bookGenre = genreService.getGenreById(id);
+        return new ResponseEntity<>(bookGenre, HttpStatus.OK);
     }
 
-    @GetMapping("getByName/{genre}")
+    @GetMapping("searchByName/{genre}")
     public ResponseEntity<GenreDto> getGenreByName(@PathVariable String genre) {
         GenreDto genreDto = genreService.getGenreByName(genre);
         return new ResponseEntity<>(genreDto, HttpStatus.OK);

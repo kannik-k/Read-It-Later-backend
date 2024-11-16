@@ -18,21 +18,21 @@ public class WishListController {
     private final WishListService wishListService;
 
     // Post might need changing depending on the frontend
-    @PostMapping("post")
+    @PostMapping()
     public ResponseEntity<WishListDtoOut> addToWishList(@RequestBody WishListDtoIn wishListDtoIn) {
         WishListDtoOut wishListDtoOut = wishListService.addToWishList(wishListDtoIn);
         return new ResponseEntity<>(wishListDtoOut, HttpStatus.OK);
     }
 
     //get by user id
-    @GetMapping("get/{userId}")
+    @GetMapping("{userId}")
     public ResponseEntity<List<WishListDtoOut>> getWishList(@PathVariable Long userId) {
         List<WishListDtoOut> wishListDtoOutList = wishListService.getUserBooks(userId);
         return new ResponseEntity<>(wishListDtoOutList, HttpStatus.OK);
     }
 
     //delete takes
-    @DeleteMapping("delete/{userId}/{bookId}")
+    @DeleteMapping("{userId}/{bookId}")
     public ResponseEntity<Void> deleteFromWishList(@PathVariable Long userId, @PathVariable Long bookId) {
         wishListService.deleteBookFromWishList(userId, bookId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
