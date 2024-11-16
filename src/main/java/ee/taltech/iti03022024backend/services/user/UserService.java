@@ -20,9 +20,12 @@ public class UserService {
     private final UserMapper userMapper;
     private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
-    public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException {
+    public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
         if (userRepository.existsByUsername(userDtoIn.getUsername())) {
             throw new NameAlreadyExistsException("Username already exists");
+        }
+        if (!Objects.equals(userDtoIn.getPassword(), userDtoIn.getPasswordAgain())) {
+            throw new IncorrectInputException("Password fields do not match");
         }
         UserEntity userEntity = userMapper.toEntity(userDtoIn);
         userRepository.save(userEntity);
