@@ -15,6 +15,9 @@ public class UserDtoIn { // Client sends to server
     @Size(min = 8, max = 15, message = "should be 8-15 characters long")
     private String password;
     @NotNull
+    @Size(min = 8, max = 15, message = "should be 8-15 characters long")
+    private String passwordAgain;
+    @NotNull
     @NotBlank
     @Email
     private String email;
