@@ -1,5 +1,6 @@
 package ee.taltech.iti03022024backend.exceptions.handler;
 
+import ee.taltech.iti03022024backend.exceptions.IncorrectInputException;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.UnfilledFieldException;
 import ee.taltech.iti03022024backend.exceptions.response.ExceptionResponse;
@@ -45,6 +46,12 @@ public class ErrorHandler {
     public ResponseEntity<ExceptionResponse> handleNameAlreadyExistsException(Exception ex) {
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IncorrectInputException.class)
+    public ResponseEntity<ExceptionResponse> handleIncorrectInputException(Exception ex) {
+        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleValidationException(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getFieldErrors().stream()
