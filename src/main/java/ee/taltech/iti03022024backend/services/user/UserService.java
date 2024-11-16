@@ -1,8 +1,6 @@
 package ee.taltech.iti03022024backend.services.user;
 
-import ee.taltech.iti03022024backend.dto.user.UserDtoIn;
-import ee.taltech.iti03022024backend.dto.user.UserDtoOut;
-import ee.taltech.iti03022024backend.dto.user.UserPasswordChangeWrapper;
+import ee.taltech.iti03022024backend.dto.user.*;
 import ee.taltech.iti03022024backend.entities.user.UserEntity;
 import ee.taltech.iti03022024backend.exceptions.IncorrectInputException;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
@@ -40,19 +38,19 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
-    public UserDtoOut updateUserUsername(long id, UserDtoIn userDtoIn) throws NotFoundException, NameAlreadyExistsException {
+    public UserDtoOut updateUserUsername(long id, UserDtoInUsername userDtoInUsername) throws NotFoundException, NameAlreadyExistsException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
-        if (userRepository.existsByUsername(userDtoIn.getUsername())) {
+        if (userRepository.existsByUsername(userDtoInUsername.getUsername())) {
             throw new NameAlreadyExistsException("Username already exists");
         }
-        userEntity.setUsername(userDtoIn.getUsername());
+        userEntity.setUsername(userDtoInUsername.getUsername());
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }
 
-    public UserDtoOut updateUserEmail(long id, UserDtoIn userDtoIn) throws NotFoundException {
+    public UserDtoOut updateUserEmail(long id, UserDtoInEmail userDtoInEmail) throws NotFoundException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
-        userEntity.setEmail(userDtoIn.getEmail());
+        userEntity.setEmail(userDtoInEmail.getEmail());
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }

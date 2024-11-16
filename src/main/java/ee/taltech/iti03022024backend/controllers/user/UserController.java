@@ -1,18 +1,12 @@
 package ee.taltech.iti03022024backend.controllers.user;
 
-import ee.taltech.iti03022024backend.dto.user.UserDtoIn;
-import ee.taltech.iti03022024backend.dto.user.UserDtoOut;
-import ee.taltech.iti03022024backend.dto.user.UserPasswordChangeWrapper;
-import ee.taltech.iti03022024backend.exceptions.IncorrectInputException;
-import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
-import ee.taltech.iti03022024backend.exceptions.NotFoundException;
+import ee.taltech.iti03022024backend.dto.user.*;
 import ee.taltech.iti03022024backend.services.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,19 +32,19 @@ public class UserController {
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @PutMapping("/put/{id}/username")
-    public ResponseEntity<UserDtoOut> updateUserUsername(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) {
-        UserDtoOut userDtoOut = userService.updateUserUsername(id, userDtoIn);
+    @PutMapping("{id}/username")
+    public ResponseEntity<UserDtoOut> updateUserUsername(@PathVariable long id, @Valid @RequestBody UserDtoInUsername userDtoInUsername) {
+        UserDtoOut userDtoOut = userService.updateUserUsername(id, userDtoInUsername);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @PutMapping("put/{id}/email")
-    public ResponseEntity<UserDtoOut> updateUserEmail(@PathVariable long id, @Valid @RequestBody UserDtoIn userDtoIn) {
-        UserDtoOut userDtoOut = userService.updateUserEmail(id, userDtoIn);
+    @PutMapping("{id}/email")
+    public ResponseEntity<UserDtoOut> updateUserEmail(@PathVariable long id, @Valid @RequestBody UserDtoInEmail userDtoInEmail) {
+        UserDtoOut userDtoOut = userService.updateUserEmail(id, userDtoInEmail);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @PutMapping("put/{id}/password")
+    @PutMapping("{id}/password")
     public ResponseEntity<UserDtoOut> updateUserPassword(@PathVariable long id, @Valid @RequestBody UserPasswordChangeWrapper userPasswordChangeWrapper) {
         UserDtoOut userDtoOut = userService.updateUserPassword(id, userPasswordChangeWrapper);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
