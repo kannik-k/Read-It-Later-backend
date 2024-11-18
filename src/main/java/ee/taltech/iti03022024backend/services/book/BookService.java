@@ -41,17 +41,23 @@ public class BookService {
         return bookDtoOut;
     }
 
-    public List<BookDtoOut> getBooks() {
+    public List<BookDtoOut> getBooks(String author, String title, Long genreId) {
         List<BookEntity> bookEntities = bookRepository.findAll();
+
         return bookEntities.stream()
+                .filter(bookEntity -> (author == null || bookEntity.getAuthor().equalsIgnoreCase(author)))
+                .filter(bookEntity -> (title == null || bookEntity.getTitle().equalsIgnoreCase(title)))
+                .filter(bookEntity -> (genreId == null || bookEntity.getGenreId() == genreId))
                 .map(bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+                    // Kui vaja, tõmba žanri nimi ja lisa DTO-sse
                     String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
                     bookDtoOut.setGenre(bookGenre);
                     return bookDtoOut;
                 })
                 .toList();
     }
+
 
     public List<BookDtoOut> getBooksByGenre(Long genreId) {
         List<BookEntity> bookEntities = bookRepository.findAll().stream()
