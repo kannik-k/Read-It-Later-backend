@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) throws NotFoundException, IncorrectInputException {
-        if (userRepository.existsByUsername(loginRequestDto.getUsername())) {
+        if (!userRepository.existsByUsername(loginRequestDto.getUsername())) {
             throw new NotFoundException("Username doesn't exist");
         }
         UserEntity userEntity = userRepository.findByUsername(loginRequestDto.getUsername());
