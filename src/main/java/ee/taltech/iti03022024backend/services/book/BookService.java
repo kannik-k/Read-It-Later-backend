@@ -10,7 +10,6 @@ import ee.taltech.iti03022024backend.repositories.books.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -41,27 +40,16 @@ public class BookService {
         return bookDtoOut;
     }
 
-    public List<BookDtoOut> getBooks() {
+    public List<BookDtoOut> getBooks(String author, String title, Long genreId) {
         List<BookEntity> bookEntities = bookRepository.findAll();
-        return bookEntities.stream()
-                .map(bookEntity -> {
-                    BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
-                    String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
-                    bookDtoOut.setGenre(bookGenre);
-                    return bookDtoOut;
-                })
-                .toList();
-    }
-
-    public List<BookDtoOut> getBooksByGenre(Long genreId) {
-        List<BookEntity> bookEntities = bookRepository.findAll().stream()
-                .filter(book -> genreId.equals(book.getGenreId()))
-                .sorted(Comparator.comparing(BookEntity::getTitle))
-                .toList();
 
         return bookEntities.stream()
+                .filter(bookEntity -> (author == null || bookEntity.getAuthor().equalsIgnoreCase(author)))
+                .filter(bookEntity -> (title == null || bookEntity.getTitle().equalsIgnoreCase(title)))
+                .filter(bookEntity -> (genreId == null || bookEntity.getGenreId() == genreId))
                 .map(bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+                    // Kui vaja, tõmba žanri nimi ja lisa DTO-sse
                     String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
                     bookDtoOut.setGenre(bookGenre);
                     return bookDtoOut;

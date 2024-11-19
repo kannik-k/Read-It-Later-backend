@@ -31,18 +31,15 @@ public class BookController {
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
-    //GET all
+    //GET all (also used for search bar to search by author/title)
     @GetMapping()
-    public ResponseEntity<List<BookDtoOut>> getBooks() {
-        List<BookDtoOut> bookList = bookService.getBooks();
-        return new ResponseEntity<>(bookList, HttpStatus.OK);
-    }
+    public ResponseEntity<List<BookDtoOut>> getBooks(
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "genreId", required = false) Long genreId
+    ) {
 
-
-    //GET by genre
-    @GetMapping("searchByGenre/{genreId}")
-    public ResponseEntity<List<BookDtoOut>> getBooksByGenre(@PathVariable("genreId") long genreId) {
-        List<BookDtoOut> bookList = bookService.getBooksByGenre(genreId);
+        List<BookDtoOut> bookList = bookService.getBooks(author, title, genreId);
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 }
