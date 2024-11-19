@@ -8,6 +8,7 @@ import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
     private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
     public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
@@ -28,6 +30,7 @@ public class UserService {
             throw new IncorrectInputException("Password fields do not match");
         }
         UserEntity userEntity = userMapper.toEntity(userDtoIn);
+        userEntity.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }
