@@ -7,6 +7,7 @@ import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
+import ee.taltech.iti03022024backend.security.JwtGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtGenerator jwtGenerator;
     private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
     public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
@@ -33,6 +35,18 @@ public class UserService {
         userEntity.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
+    }
+
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws NotFoundException, IncorrectInputException {
+        if (userRepository.existsByUsername(loginRequestDto.getUsername())) {
+            throw new NotFoundException("Username doesn't exist");
+        }
+        UserEntity userEntity = userRepository.findByUsername(loginRequestDto.getUsername());
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), userEntity.getPassword())) {
+            throw new IncorrectInputException("Invalid password");
+        }
+        String token = jwtGenerator.generateToken(userEntity);
+        return new LoginResponseDto(token);
     }
 
     public List<UserDtoOut> getAllUsers() {
