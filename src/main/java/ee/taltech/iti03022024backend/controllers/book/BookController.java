@@ -42,12 +42,4 @@ public class BookController {
         List<BookDtoOut> bookList = bookService.getBooks(author, title, genreId);
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
-
-
-    //GET by genre (used for sidebar)
-    @GetMapping("searchByGenre/{genreId}")
-    public ResponseEntity<List<BookDtoOut>> getBooksByGenre(@PathVariable("genreId") long genreId) {
-        List<BookDtoOut> bookList = bookService.getBooksByGenre(genreId);
-        return new ResponseEntity<>(bookList, HttpStatus.OK);
-    }
 }

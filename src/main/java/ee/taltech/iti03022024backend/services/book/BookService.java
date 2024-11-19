@@ -10,7 +10,6 @@ import ee.taltech.iti03022024backend.repositories.books.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -51,23 +50,6 @@ public class BookService {
                 .map(bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
                     // Kui vaja, tõmba žanri nimi ja lisa DTO-sse
-                    String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
-                    bookDtoOut.setGenre(bookGenre);
-                    return bookDtoOut;
-                })
-                .toList();
-    }
-
-
-    public List<BookDtoOut> getBooksByGenre(Long genreId) {
-        List<BookEntity> bookEntities = bookRepository.findAll().stream()
-                .filter(book -> genreId.equals(book.getGenreId()))
-                .sorted(Comparator.comparing(BookEntity::getTitle))
-                .toList();
-
-        return bookEntities.stream()
-                .map(bookEntity -> {
-                    BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
                     String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
                     bookDtoOut.setGenre(bookGenre);
                     return bookDtoOut;
