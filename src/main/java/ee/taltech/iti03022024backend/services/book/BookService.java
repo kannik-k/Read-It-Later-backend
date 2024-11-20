@@ -7,7 +7,9 @@ import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
+import ee.taltech.iti03022024backend.specifications.book.BookSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,17 +43,20 @@ public class BookService {
     }
 
     public List<BookDtoOut> getBooks(String author, String title, Long genreId) {
-        List<BookEntity> bookEntities = bookRepository.findAll();
+        Specification<BookEntity> specification = Specification
+                .where(BookSpecifications.getByAuthor(author))
+                .and(BookSpecifications.getByTitle(title))
+                .and(BookSpecifications.getByGenreId(genreId));
+
+        List<BookEntity> bookEntities = bookRepository.findAll(specification);
 
         return bookEntities.stream()
-                .filter(bookEntity -> (author == null || bookEntity.getAuthor().equalsIgnoreCase(author)))
-                .filter(bookEntity -> (title == null || bookEntity.getTitle().equalsIgnoreCase(title)))
-                .filter(bookEntity -> (genreId == null || bookEntity.getGenreId() == genreId))
                 .map(bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
-                    // Kui vaja, tõmba žanri nimi ja lisa DTO-sse
+
                     String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
                     bookDtoOut.setGenre(bookGenre);
+
                     return bookDtoOut;
                 })
                 .toList();
