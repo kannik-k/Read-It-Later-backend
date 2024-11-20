@@ -1,8 +1,8 @@
-package ee.taltech.iti03022024backend.controllers.wishList;
+package ee.taltech.iti03022024backend.controllers.wishlist;
 
 import ee.taltech.iti03022024backend.dto.wishList.WishListDtoIn;
 import ee.taltech.iti03022024backend.dto.wishList.WishListDtoOut;
-import ee.taltech.iti03022024backend.services.wishList.WishListService;
+import ee.taltech.iti03022024backend.services.wishlist.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

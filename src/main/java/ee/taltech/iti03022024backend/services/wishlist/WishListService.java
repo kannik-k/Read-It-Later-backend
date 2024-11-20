@@ -1,16 +1,17 @@
-package ee.taltech.iti03022024backend.services.wishList;
+package ee.taltech.iti03022024backend.services.wishlist;
 
 import ee.taltech.iti03022024backend.dto.wishList.WishListDtoIn;
 import ee.taltech.iti03022024backend.dto.wishList.WishListDtoOut;
 import ee.taltech.iti03022024backend.entities.wishList.WishListEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.mappers.wishList.WishListMapper;
-import ee.taltech.iti03022024backend.repositories.wishList.WishListRepository;
+import ee.taltech.iti03022024backend.repositories.wishlist.WishListRepository;
+import ee.taltech.iti03022024backend.specifications.wishlist.WishListSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -30,17 +31,14 @@ public class WishListService {
     }
 
     public List<WishListDtoOut> getUserBooks(Long userId) {
-        List<WishListEntity> wishListEntities = wishListRepository.findAll().stream()
-                .filter(book -> userId.equals(book.getUserId()))
-                .collect(Collectors.toList());
-        return wishListMapper.toDtoList(wishListEntities);
+        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserId(userId));
+        List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
+        return wishListMapper.toDtoList(wishListEntityList);
     }
 
     public void deleteBookFromWishList(Long userId, Long bookId) {
-        List<WishListEntity> wishListEntities = wishListRepository.findAll().stream()
-                .filter(wishList -> wishList.getUserId().equals(userId) && wishList.getBookId().equals(bookId))
-                .collect(Collectors.toList());
-
-        wishListRepository.deleteAll(wishListEntities);
+        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserIdAndBookId(userId, bookId));
+        List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
+        wishListRepository.deleteAll(wishListEntityList);
     }
 }
