@@ -10,47 +10,53 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("api/user")
+@RequestMapping("api")
 @RestController
 public class UserController {
     private final UserService userService;
 
-    @PostMapping()
-    public ResponseEntity<UserDtoOut> createUser(@Valid @RequestBody UserDtoIn userDtoIn) {
-        UserDtoOut userDtoOut = userService.createUser(userDtoIn);
-        return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
+    @PostMapping("public/user")
+    public ResponseEntity<LoginResponseDto> createUser(@Valid @RequestBody UserDtoIn userDtoIn) {
+        LoginResponseDto loginResponseDto = userService.createUser(userDtoIn);
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
+
+    @PostMapping("public/user/login")
+    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        return userService.login(loginRequestDto);
+    }
+
 
     @GetMapping()
     public List<UserDtoOut> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("user/{id}")
     public ResponseEntity<UserDtoOut> getUserById(@PathVariable long id) {
         UserDtoOut userDtoOut = userService.findUser(id);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @PutMapping("{id}/username")
+    @PutMapping("user/{id}/username")
     public ResponseEntity<UserDtoOut> updateUserUsername(@PathVariable long id, @Valid @RequestBody UserDtoInUsername userDtoInUsername) {
         UserDtoOut userDtoOut = userService.updateUserUsername(id, userDtoInUsername);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @PutMapping("{id}/email")
+    @PutMapping("user/{id}/email")
     public ResponseEntity<UserDtoOut> updateUserEmail(@PathVariable long id, @Valid @RequestBody UserDtoInEmail userDtoInEmail) {
         UserDtoOut userDtoOut = userService.updateUserEmail(id, userDtoInEmail);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @PutMapping("{id}/password")
+    @PutMapping("user/{id}/password")
     public ResponseEntity<UserDtoOut> updateUserPassword(@PathVariable long id, @Valid @RequestBody UserPasswordChangeWrapper userPasswordChangeWrapper) {
         UserDtoOut userDtoOut = userService.updateUserPassword(id, userPasswordChangeWrapper);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

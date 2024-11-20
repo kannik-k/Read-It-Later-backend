@@ -7,7 +7,9 @@ import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
+import ee.taltech.iti03022024backend.security.JwtGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +20,11 @@ import java.util.Objects;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtGenerator jwtGenerator;
     private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
-    public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
+    public LoginResponseDto createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
         if (userRepository.existsByUsername(userDtoIn.getUsername())) {
             throw new NameAlreadyExistsException("Username already exists");
         }
@@ -28,8 +32,22 @@ public class UserService {
             throw new IncorrectInputException("Password fields do not match");
         }
         UserEntity userEntity = userMapper.toEntity(userDtoIn);
+        userEntity.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
         userRepository.save(userEntity);
-        return userMapper.toDto(userEntity);
+        String token = jwtGenerator.generateToken(userEntity);
+        return new LoginResponseDto(token);
+    }
+
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) throws NotFoundException, IncorrectInputException {
+        if (!userRepository.existsByUsername(loginRequestDto.getUsername())) {
+            throw new NotFoundException("Username doesn't exist");
+        }
+        UserEntity userEntity = userRepository.findByUsername(loginRequestDto.getUsername());
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), userEntity.getPassword())) {
+            throw new IncorrectInputException("Invalid password");
+        }
+        String token = jwtGenerator.generateToken(userEntity);
+        return new LoginResponseDto(token);
     }
 
     public List<UserDtoOut> getAllUsers() {
@@ -61,12 +79,12 @@ public class UserService {
     // Later: passwordEncoder should be used here
     public UserDtoOut updateUserPassword(long id, UserPasswordChangeWrapper userPasswordChangeWrapper) throws NotFoundException, IncorrectInputException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
-        if (!Objects.equals(userPasswordChangeWrapper.getOldPassword(), userEntity.getPassword())) {
+        if (!passwordEncoder.matches(userPasswordChangeWrapper.getOldPassword(), userEntity.getPassword())) {
             throw new IncorrectInputException("Old password is incorrect");
         } else if (!Objects.equals(userPasswordChangeWrapper.getNewPassword(), userPasswordChangeWrapper.getConfirmNewPassword())) {
             throw new IncorrectInputException("New password fields do not match");
         }
-        userEntity.setPassword(userPasswordChangeWrapper.getNewPassword());
+        userEntity.setPassword(passwordEncoder.encode(userPasswordChangeWrapper.getNewPassword()));
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }
