@@ -16,9 +16,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("public/user")
-    public ResponseEntity<UserDtoOut> createUser(@Valid @RequestBody UserDtoIn userDtoIn) {
-        UserDtoOut userDtoOut = userService.createUser(userDtoIn);
-        return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
+    public ResponseEntity<LoginResponseDto> createUser(@Valid @RequestBody UserDtoIn userDtoIn) {
+        LoginResponseDto loginResponseDto = userService.createUser(userDtoIn);
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 
     @PostMapping("public/user/login")

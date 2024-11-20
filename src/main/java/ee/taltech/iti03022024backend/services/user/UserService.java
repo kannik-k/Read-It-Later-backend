@@ -24,7 +24,7 @@ public class UserService {
     private final JwtGenerator jwtGenerator;
     private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
-    public UserDtoOut createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
+    public LoginResponseDto createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
         if (userRepository.existsByUsername(userDtoIn.getUsername())) {
             throw new NameAlreadyExistsException("Username already exists");
         }
@@ -34,7 +34,8 @@ public class UserService {
         UserEntity userEntity = userMapper.toEntity(userDtoIn);
         userEntity.setPassword(passwordEncoder.encode(userDtoIn.getPassword()));
         userRepository.save(userEntity);
-        return userMapper.toDto(userEntity);
+        String token = jwtGenerator.generateToken(userEntity);
+        return new LoginResponseDto(token);
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) throws NotFoundException, IncorrectInputException {
