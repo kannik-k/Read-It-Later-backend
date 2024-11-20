@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("api/book")
+@RequestMapping("api")
 @RestController
 public class BookController {
     private final BookService bookService;
 
     //POST
-    @PostMapping()
+    @PostMapping("public/book")
     public ResponseEntity<BookDtoOut> createBook(@Valid @RequestBody BookDtoIn bookDtoIn) {
         BookDtoOut book = bookService.createBook(bookDtoIn);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
     //GET by id
-    @GetMapping("searchById/{id}")
+    @GetMapping("public/book/searchById/{id}")
     public ResponseEntity<BookDtoOut> getBookById(@PathVariable("id") long id) {
         BookDtoOut book = bookService.getBookById(id);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
     //GET all (also used for search bar to search by author/title)
-    @GetMapping()
+    @GetMapping("public/book")
     public ResponseEntity<List<BookDtoOut>> getBooks(
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "title", required = false) String title,

@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("api/review")
+@RequestMapping("api")
 @RestController
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping()
+    @PostMapping("review")
     public ResponseEntity<ReviewDtoIn> createReview(@Valid @RequestBody ReviewDtoIn reviewDtoIn) {
         ReviewDtoIn review = reviewService.createReview(reviewDtoIn);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
-    @GetMapping("{bookId}")
+    @GetMapping("public/review/{bookId}")
     public ResponseEntity<List<ReviewDtoIn>> getReview(@PathVariable Long bookId) {
         List<ReviewDtoIn> reviews = reviewService.getBookReviews(bookId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
