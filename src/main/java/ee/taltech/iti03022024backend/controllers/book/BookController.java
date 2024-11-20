@@ -18,7 +18,7 @@ public class BookController {
     private final BookService bookService;
 
     //POST
-    @PostMapping("public/book")
+    @PostMapping("book")
     public ResponseEntity<BookDtoOut> createBook(@Valid @RequestBody BookDtoIn bookDtoIn) {
         BookDtoOut book = bookService.createBook(bookDtoIn);
         return new ResponseEntity<>(book, HttpStatus.OK);
