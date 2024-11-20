@@ -78,12 +78,12 @@ public class UserService {
     // Later: passwordEncoder should be used here
     public UserDtoOut updateUserPassword(long id, UserPasswordChangeWrapper userPasswordChangeWrapper) throws NotFoundException, IncorrectInputException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
-        if (!Objects.equals(userPasswordChangeWrapper.getOldPassword(), userEntity.getPassword())) {
+        if (!passwordEncoder.matches(userPasswordChangeWrapper.getOldPassword(), userEntity.getPassword())) {
             throw new IncorrectInputException("Old password is incorrect");
         } else if (!Objects.equals(userPasswordChangeWrapper.getNewPassword(), userPasswordChangeWrapper.getConfirmNewPassword())) {
             throw new IncorrectInputException("New password fields do not match");
         }
-        userEntity.setPassword(userPasswordChangeWrapper.getNewPassword());
+        userEntity.setPassword(passwordEncoder.encode(userPasswordChangeWrapper.getNewPassword()));
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }
