@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -48,10 +47,6 @@ public class UserService {
         }
         String token = jwtGenerator.generateToken(userEntity);
         return new LoginResponseDto(token);
-    }
-
-    public List<UserDtoOut> getAllUsers() {
-        return userMapper.toDtoList(userRepository.findAll());
     }
 
     public UserDtoOut findUser(long id) throws NotFoundException {

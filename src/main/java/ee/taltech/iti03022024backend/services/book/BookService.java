@@ -7,8 +7,10 @@ import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
+import ee.taltech.iti03022024backend.dto.book.BookPageResponseDto;
 import ee.taltech.iti03022024backend.specifications.book.BookSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -42,23 +44,31 @@ public class BookService {
         return bookDtoOut;
     }
 
-    public List<BookDtoOut> getBooks(String author, String title, Long genreId) {
+    public BookPageResponseDto getBooks(String author, String title, Long genreId, int page, int size) {
         Specification<BookEntity> specification = Specification
                 .where(BookSpecifications.getByAuthor(author))
                 .and(BookSpecifications.getByTitle(title))
                 .and(BookSpecifications.getByGenreId(genreId));
 
-        List<BookEntity> bookEntities = bookRepository.findAll(specification);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+        if (author != null) {
+            pageable = PageRequest.of(page, size, Sort.by("author").ascending());
+        }
 
-        return bookEntities.stream()
+        Slice<BookEntity> slice = bookRepository.findAll(specification, pageable);
+
+        boolean isLastPage = slice.isLast();
+
+        List<BookDtoOut> booksDtoOutList = slice.stream()
                 .map(bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
-
                     String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
                     bookDtoOut.setGenre(bookGenre);
-
                     return bookDtoOut;
                 })
                 .toList();
+
+        return new BookPageResponseDto(booksDtoOutList, !isLastPage);
     }
+
 }

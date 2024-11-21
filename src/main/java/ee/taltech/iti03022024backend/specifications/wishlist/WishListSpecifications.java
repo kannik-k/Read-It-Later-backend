@@ -1,6 +1,6 @@
 package ee.taltech.iti03022024backend.specifications.wishlist;
 
-import ee.taltech.iti03022024backend.entities.wishList.WishListEntity;
+import ee.taltech.iti03022024backend.entities.wishlist.WishListEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

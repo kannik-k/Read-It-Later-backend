@@ -1,8 +1,8 @@
-package ee.taltech.iti03022024backend.mappers.wishList;
+package ee.taltech.iti03022024backend.mappers.wishlist;
 
-import ee.taltech.iti03022024backend.dto.wishList.WishListDtoIn;
-import ee.taltech.iti03022024backend.dto.wishList.WishListDtoOut;
-import ee.taltech.iti03022024backend.entities.wishList.WishListEntity;
+import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoIn;
+import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoOut;
+import ee.taltech.iti03022024backend.entities.wishlist.WishListEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

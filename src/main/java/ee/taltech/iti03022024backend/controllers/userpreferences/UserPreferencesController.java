@@ -1,7 +1,7 @@
 package ee.taltech.iti03022024backend.controllers.userpreferences;
 
-import ee.taltech.iti03022024backend.dto.userPreferences.UserPreferencesDtoIn;
-import ee.taltech.iti03022024backend.dto.userPreferences.UserPreferencesDtoOut;
+import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoIn;
+import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoOut;
 import ee.taltech.iti03022024backend.services.userpreferences.UserPreferencesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

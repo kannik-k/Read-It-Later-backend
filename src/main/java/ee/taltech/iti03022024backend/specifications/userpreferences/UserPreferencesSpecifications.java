@@ -1,6 +1,6 @@
 package ee.taltech.iti03022024backend.specifications.userpreferences;
 
-import ee.taltech.iti03022024backend.entities.userPreferences.UserPreferencesEntity;
+import ee.taltech.iti03022024backend.entities.usepreferences.UserPreferencesEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

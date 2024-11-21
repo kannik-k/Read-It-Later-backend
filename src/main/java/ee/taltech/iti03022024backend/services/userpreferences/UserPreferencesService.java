@@ -1,11 +1,11 @@
 package ee.taltech.iti03022024backend.services.userpreferences;
 
-import ee.taltech.iti03022024backend.dto.userPreferences.UserPreferencesDtoIn;
-import ee.taltech.iti03022024backend.dto.userPreferences.UserPreferencesDtoOut;
-import ee.taltech.iti03022024backend.entities.userPreferences.UserPreferencesEntity;
+import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoIn;
+import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoOut;
+import ee.taltech.iti03022024backend.entities.usepreferences.UserPreferencesEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
-import ee.taltech.iti03022024backend.mappers.userPreferences.UserPreferencesMapper;
+import ee.taltech.iti03022024backend.mappers.userpreferences.UserPreferencesMapper;
 import ee.taltech.iti03022024backend.repositories.userpreferences.UserPreferencesRepository;
 import ee.taltech.iti03022024backend.specifications.userpreferences.UserPreferencesSpecifications;
 import lombok.RequiredArgsConstructor;

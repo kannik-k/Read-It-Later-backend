@@ -1,10 +1,10 @@
 package ee.taltech.iti03022024backend.services.wishlist;
 
-import ee.taltech.iti03022024backend.dto.wishList.WishListDtoIn;
-import ee.taltech.iti03022024backend.dto.wishList.WishListDtoOut;
-import ee.taltech.iti03022024backend.entities.wishList.WishListEntity;
+import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoIn;
+import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoOut;
+import ee.taltech.iti03022024backend.entities.wishlist.WishListEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
-import ee.taltech.iti03022024backend.mappers.wishList.WishListMapper;
+import ee.taltech.iti03022024backend.mappers.wishlist.WishListMapper;
 import ee.taltech.iti03022024backend.repositories.wishlist.WishListRepository;
 import ee.taltech.iti03022024backend.specifications.wishlist.WishListSpecifications;
 import lombok.RequiredArgsConstructor;

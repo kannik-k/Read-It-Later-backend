@@ -17,7 +17,7 @@ public class BookSpecifications {
     public static Specification<BookEntity> getByTitle(String title) {
         return (root, query, criteriaBuilder) ->
                 title == null ? null : criteriaBuilder
-                        .like(criteriaBuilder.lower(root.get("title")), "%" + title + "%");
+                        .like(criteriaBuilder.lower(root.get("title")), "%" + title.toLowerCase() + "%");
     }
 
     public static Specification<BookEntity> getByGenreId(Long genreId) {
