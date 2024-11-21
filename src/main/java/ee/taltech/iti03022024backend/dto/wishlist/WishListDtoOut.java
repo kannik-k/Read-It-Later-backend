@@ -1,4 +1,4 @@
-package ee.taltech.iti03022024backend.dto.wishList;
+package ee.taltech.iti03022024backend.dto.wishlist;
 
 import lombok.Data;
 

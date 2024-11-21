@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api")
@@ -24,12 +23,6 @@ public class UserController {
     @PostMapping("public/user/login")
     public LoginResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         return userService.login(loginRequestDto);
-    }
-
-
-    @GetMapping()
-    public List<UserDtoOut> getAllUsers() {
-        return userService.getAllUsers();
     }
 
     @GetMapping("user/{id}")

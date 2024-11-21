@@ -1,4 +1,4 @@
-package ee.taltech.iti03022024backend.dto.userPreferences;
+package ee.taltech.iti03022024backend.dto.userpreferences;
 
 import lombok.Data;
 

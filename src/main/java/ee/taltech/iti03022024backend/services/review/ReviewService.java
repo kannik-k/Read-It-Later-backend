@@ -4,11 +4,12 @@ import ee.taltech.iti03022024backend.dto.review.ReviewDtoIn;
 import ee.taltech.iti03022024backend.entities.review.ReviewEntity;
 import ee.taltech.iti03022024backend.mappers.review.ReviewMapper;
 import ee.taltech.iti03022024backend.repositories.review.ReviewRepository;
+import ee.taltech.iti03022024backend.specifications.review.ReviewSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,8 +25,10 @@ public class ReviewService {
     }
 
     public List<ReviewDtoIn> getBookReviews(Long bookId) {
-        List<ReviewEntity> reviews = reviewRepository.findAll().stream()
-                .filter(review -> review.getBookId().equals(bookId)).collect(Collectors.toList());
-        return reviewMapper.toDtoList(reviews);
+        Specification<ReviewEntity> spec = Specification.where(ReviewSpecifications.getByBookId(bookId));
+
+        List<ReviewEntity> reviewEntities = reviewRepository.findAll(spec);
+
+        return reviewMapper.toDtoList(reviewEntities);
     }
 }
