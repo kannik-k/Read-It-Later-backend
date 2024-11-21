@@ -21,5 +21,11 @@ services:
     volumes:
       - /iti0302/backend/application.properties:/app/application.properties
 
+  frontend:
+    image: aetkadi/iti0302-2024-frontend:latest
+    container_name: iti0302-2024-frontend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
 volumes:
   postgres_data:
