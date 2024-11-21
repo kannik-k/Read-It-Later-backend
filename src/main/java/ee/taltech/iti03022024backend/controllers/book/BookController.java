@@ -44,4 +44,9 @@ public class BookController {
         BookPageResponseDto bookList = bookService.getBooks(author, title, genreId, page, size);
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
+
+    @GetMapping("public/hello")
+    public String hello() {
+        return "HELLO";
+    }
 }
