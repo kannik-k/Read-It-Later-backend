@@ -7,6 +7,7 @@ import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.userpreferences.UserPreferencesMapper;
 import ee.taltech.iti03022024backend.repositories.userpreferences.UserPreferencesRepository;
+import ee.taltech.iti03022024backend.services.genre.GenreService;
 import ee.taltech.iti03022024backend.specifications.userpreferences.UserPreferencesSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,6 +21,7 @@ public class UserPreferencesService {
 
     private final UserPreferencesRepository userPreferencesRepository;
     private final UserPreferencesMapper userPreferencesMapper;
+    private final GenreService genreService;
 
     public UserPreferencesDtoOut addGenre(UserPreferencesDtoIn userPreferencesDtoIn) {
         if (userPreferencesRepository.existsByUserIdAndGenreId(userPreferencesDtoIn.getUserId(), userPreferencesDtoIn.getGenreId())) {
@@ -34,7 +36,12 @@ public class UserPreferencesService {
     public List<UserPreferencesDtoOut> getGenres(Long userId) {
         Specification<UserPreferencesEntity> spec = Specification.where(UserPreferencesSpecifications.getByUserId(userId));
         List<UserPreferencesEntity> userPreferences = userPreferencesRepository.findAll(spec);
-        return userPreferencesMapper.toDtoList(userPreferences);
+        return userPreferences.stream().map(entity -> {
+            UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesMapper.toDto(entity);
+            String genre = genreService.getGenreById(entity.getGenreId());
+            userPreferencesDtoOut.setGenreId(genre);
+            return userPreferencesDtoOut;
+        }).toList();
     }
 
     public void deleteGenre(Long userId, Long genreId) throws NotFoundException {
