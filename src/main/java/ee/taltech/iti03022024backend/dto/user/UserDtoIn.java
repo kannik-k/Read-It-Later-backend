@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@Schema(description = "Data transfer object for user. Clint sends to server.")
+@Schema(description = "Data transfer object for user. Client sends to server.")
 public class UserDtoIn { // Client sends to server
     @NotNull
     @Size(min = 5, max = 15, message = "should be 5-15 characters long")

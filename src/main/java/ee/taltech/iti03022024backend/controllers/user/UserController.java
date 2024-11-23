@@ -29,9 +29,15 @@ public class UserController {
         return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Log in user.",
+            description = "Checks if username and password are correct and sends back new token if login is successful."
+    )
+    @ApiResponse(responseCode = "200", description = "User has been logged in successfully.")
     @PostMapping("public/user/login")
-    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        return userService.login(loginRequestDto);
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        LoginResponseDto loginResponseDto = userService.login(loginRequestDto);
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 
     @Operation(
