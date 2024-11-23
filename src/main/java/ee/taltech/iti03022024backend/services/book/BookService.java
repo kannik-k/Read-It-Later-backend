@@ -1,13 +1,13 @@
 package ee.taltech.iti03022024backend.services.book;
 
-import ee.taltech.iti03022024backend.controllers.genre.GenreController;
 import ee.taltech.iti03022024backend.dto.book.BookDtoIn;
 import ee.taltech.iti03022024backend.dto.book.BookDtoOut;
 import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
-import ee.taltech.iti03022024backend.dto.book.BookPageResponseDto;
+import ee.taltech.iti03022024backend.response.book.BookPageResponse;
+import ee.taltech.iti03022024backend.services.genre.GenreService;
 import ee.taltech.iti03022024backend.specifications.book.BookSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -22,12 +22,12 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final GenreController genreController;
+    private final GenreService genreService;
 
     public BookDtoOut createBook(BookDtoIn bookDtoIn) {
         BookEntity bookEntity = bookMapper.toEntity(bookDtoIn);
         bookRepository.save(bookEntity);
-        String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
+        String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
         BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
         bookDtoOut.setGenre(bookGenre);
 
@@ -36,7 +36,7 @@ public class BookService {
 
     public BookDtoOut getBookById(Long id) throws NotFoundException{
         BookEntity bookEntity = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found"));
-        String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
+        String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
 
         BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
         bookDtoOut.setGenre(bookGenre);
@@ -44,7 +44,7 @@ public class BookService {
         return bookDtoOut;
     }
 
-    public BookPageResponseDto getBooks(String author, String title, Long genreId, int page, int size) {
+    public BookPageResponse getBooks(String author, String title, Long genreId, int page, int size) {
         Specification<BookEntity> specification = Specification
                 .where(BookSpecifications.getByAuthor(author))
                 .and(BookSpecifications.getByTitle(title))
@@ -62,13 +62,13 @@ public class BookService {
         List<BookDtoOut> booksDtoOutList = slice.stream()
                 .map(bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
-                    String bookGenre = genreController.getGenreById(bookEntity.getGenreId()).getBody();
+                    String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
                     bookDtoOut.setGenre(bookGenre);
                     return bookDtoOut;
                 })
                 .toList();
 
-        return new BookPageResponseDto(booksDtoOutList, !isLastPage);
+        return new BookPageResponse(booksDtoOutList, !isLastPage);
     }
 
 }
