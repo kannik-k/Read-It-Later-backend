@@ -24,4 +24,13 @@ public class GenreService {
         GenreEntity genre = genreRepository.findById(id).orElseThrow(() -> new NotFoundException("Genre does not exist"));
         return genre.getGenre();
     }
+
+    public Long getGenreByName(String name) throws NotFoundException {
+        List<GenreEntity> genres = genreRepository.findAll();
+        return genres.stream()
+                .filter(genre -> genre.getGenre().equalsIgnoreCase(name))
+                .findFirst()
+                .map(GenreEntity::getGenreId)
+                .orElseThrow(() -> new NotFoundException("Genre does not exist"));
+    }
 }
