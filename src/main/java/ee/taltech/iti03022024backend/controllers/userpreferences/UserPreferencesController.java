@@ -48,9 +48,9 @@ public class UserPreferencesController {
             description = "Removes genre, user has selected, from user preference table."
     )
     @ApiResponse(responseCode = "204", description = "Genre has been removed successfully.")
-    @DeleteMapping("{userId}/{genreId}")
-    public ResponseEntity<Void> deleteGenre(@PathVariable Long userId, @PathVariable Long genreId) {
-        userPreferencesService.deleteGenre(userId, genreId);
+    @DeleteMapping("{userId}/{genre}")
+    public ResponseEntity<Void> deleteGenre(@PathVariable Long userId, @PathVariable String genre) {
+        userPreferencesService.deleteGenre(userId, genre);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

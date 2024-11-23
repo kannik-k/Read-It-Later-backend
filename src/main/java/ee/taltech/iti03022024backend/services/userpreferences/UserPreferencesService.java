@@ -44,12 +44,18 @@ public class UserPreferencesService {
         }).toList();
     }
 
-    public void deleteGenre(Long userId, Long genreId) throws NotFoundException {
-        if (!userPreferencesRepository.existsByUserIdAndGenreId(userId, genreId)) {
-            throw new NotFoundException("Genre does not exist.");
+    public void deleteGenre(Long userId, String genre) throws NotFoundException {
+        Long genreId = genreService.getGenreByName(genre);
+        if (genreId == null) {
+            throw new NotFoundException("Genre not found: " + genre);
         }
-        Specification<UserPreferencesEntity> spec = Specification.where(UserPreferencesSpecifications.getByUserIdAndBookId(userId, genreId));
-        List<UserPreferencesEntity> userPreferences = userPreferencesRepository.findAll(spec);
+
+        List<UserPreferencesEntity> userPreferences = userPreferencesRepository.findByUserIdAndGenreId(userId, genreId);
+
+        if (userPreferences.isEmpty()) {
+            throw new NotFoundException("No preferences found for user " + userId + " with genre " + genre);
+        }
+
         userPreferencesRepository.deleteAll(userPreferences);
     }
 }
