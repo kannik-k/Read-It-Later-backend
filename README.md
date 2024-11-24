@@ -10,7 +10,7 @@ ReadItLater is a platform that allows users to make a personal wishlist of books
 
 ## Used technologies
 
-* Postgresql ja Liquibase - database
+* Postgresql and Liquibase - database
 * Vue.js - frontend
 * Spring Boot - backend
 * Gradle - build tool
