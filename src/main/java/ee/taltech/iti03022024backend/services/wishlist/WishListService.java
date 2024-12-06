@@ -10,6 +10,7 @@ import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.mappers.wishlist.WishListMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
 import ee.taltech.iti03022024backend.repositories.wishlist.WishListRepository;
+import ee.taltech.iti03022024backend.services.genre.GenreService;
 import ee.taltech.iti03022024backend.specifications.wishlist.WishListSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +26,7 @@ public class WishListService {
     private final WishListRepository wishListRepository;
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final GenreService genreService;
 
     public WishListDtoOut addToWishList(WishListDtoIn wishListDtoIn) {
         if (wishListRepository.existsByUserIdAndBookId(wishListDtoIn.getUserId(), wishListDtoIn.getBookId())) {
@@ -41,7 +43,14 @@ public class WishListService {
         List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
         List<Long> booksById = wishListEntityList.stream().map(WishListEntity::getBookId).toList();
         List<BookEntity> books = bookRepository.findAllById(booksById);
-        return bookMapper.toDtoList(books);
+        return books.stream().map(
+                bookEntity -> {
+                    BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+                    String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
+                    bookDtoOut.setGenre(bookGenre);
+                    return bookDtoOut;
+                })
+                .toList();
     }
 
     public void deleteBookFromWishList(Long userId, Long bookId) {
