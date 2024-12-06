@@ -5,6 +5,7 @@ import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoOut;
 import ee.taltech.iti03022024backend.entities.user.UserEntity;
 import ee.taltech.iti03022024backend.entities.wishlist.WishListEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
+import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.wishlist.WishListMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import ee.taltech.iti03022024backend.repositories.wishlist.WishListRepository;
@@ -23,8 +24,10 @@ public class WishListService {
     private final WishListRepository wishListRepository;
     private final UserRepository userRepository;
 
+    private static final String USER_NONEXISTENT = "User does not exist";
+
     public WishListDtoOut addToWishList(String userName, WishListDtoIn wishListDtoIn) {
-        long userId = userRepository.findByUsername(userName).getUserId();
+        long userId = userRepository.findByUsername(userName).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT)).getUserId();
         if (wishListRepository.existsByUserIdAndBookId(userId, wishListDtoIn.getBookId())) {
             throw new NameAlreadyExistsException("User already has book in wish list.");
         }
@@ -36,14 +39,14 @@ public class WishListService {
     }
 
     public List<WishListDtoOut> getUserBooks(String userName) {
-        UserEntity user = userRepository.findByUsername(userName);
+        UserEntity user = userRepository.findByUsername(userName).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
         Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserId(user.getUserId()));
         List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
         return wishListMapper.toDtoList(wishListEntityList);
     }
 
     public void deleteBookFromWishList(String userName, Long bookId) {
-        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserIdAndBookId(userRepository.findByUsername(userName).getUserId(), bookId));
+        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserIdAndBookId(userRepository.findByUsername(userName).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT)).getUserId(), bookId));
         List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
         wishListRepository.deleteAll(wishListEntityList);
     }

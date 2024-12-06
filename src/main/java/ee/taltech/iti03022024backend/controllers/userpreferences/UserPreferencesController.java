@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,8 +28,8 @@ public class UserPreferencesController {
     )
     @ApiResponse(responseCode = "200", description = "New genre has been added successfully.")
     @PostMapping()
-    public ResponseEntity<UserPreferencesDtoOut> addGenre(@RequestBody UserPreferencesDtoIn userPreferencesDtoIn) {
-        UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesService.addGenre(userPreferencesDtoIn);
+    public ResponseEntity<UserPreferencesDtoOut> addGenre(Principal principal, @RequestBody UserPreferencesDtoIn userPreferencesDtoIn) {
+        UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesService.addGenre(userPreferencesDtoIn, principal.getName());
         return new ResponseEntity<>(userPreferencesDtoOut, HttpStatus.OK);
     }
 
@@ -37,9 +38,9 @@ public class UserPreferencesController {
             description = "Retrieves genres, user has added to preferences table."
     )
     @ApiResponse(responseCode = "200", description = "List of preferences have been retrieved successfully.")
-    @GetMapping("{userId}")
-    public ResponseEntity<List<UserPreferencesDtoOut>> getUserPreferences(@PathVariable Long userId) {
-        List<UserPreferencesDtoOut> listOfPreferences = userPreferencesService.getGenres(userId);
+    @GetMapping()
+    public ResponseEntity<List<UserPreferencesDtoOut>> getUserPreferences(Principal principal) {
+        List<UserPreferencesDtoOut> listOfPreferences = userPreferencesService.getGenres(principal.getName());
         return new ResponseEntity<>(listOfPreferences, HttpStatus.OK);
     }
 
@@ -48,9 +49,9 @@ public class UserPreferencesController {
             description = "Removes genre, user has selected, from user preference table."
     )
     @ApiResponse(responseCode = "204", description = "Genre has been removed successfully.")
-    @DeleteMapping("{userId}/{genre}")
-    public ResponseEntity<Void> deleteGenre(@PathVariable Long userId, @PathVariable String genre) {
-        userPreferencesService.deleteGenre(userId, genre);
+    @DeleteMapping("{genre}")
+    public ResponseEntity<Void> deleteGenre(Principal principal, @PathVariable String genre) {
+        userPreferencesService.deleteGenre(principal.getName(), genre);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 public interface UserPreferencesRepository extends JpaRepository<UserPreferencesEntity, Long>, JpaSpecificationExecutor<UserPreferencesEntity> {
     boolean existsByUserIdAndGenreId(Long userId, Long genreId);
     List<UserPreferencesEntity> findByUserIdAndGenreId(Long userId, Long genreId);
+    void deleteByUserId(Long userId);
 }
