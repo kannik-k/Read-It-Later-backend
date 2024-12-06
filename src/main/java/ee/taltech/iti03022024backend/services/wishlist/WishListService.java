@@ -2,9 +2,11 @@ package ee.taltech.iti03022024backend.services.wishlist;
 
 import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoIn;
 import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoOut;
+import ee.taltech.iti03022024backend.entities.user.UserEntity;
 import ee.taltech.iti03022024backend.entities.wishlist.WishListEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.mappers.wishlist.WishListMapper;
+import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import ee.taltech.iti03022024backend.repositories.wishlist.WishListRepository;
 import ee.taltech.iti03022024backend.specifications.wishlist.WishListSpecifications;
 import lombok.RequiredArgsConstructor;
@@ -19,25 +21,29 @@ public class WishListService {
 
     private final WishListMapper wishListMapper;
     private final WishListRepository wishListRepository;
+    private final UserRepository userRepository;
 
-    public WishListDtoOut addToWishList(WishListDtoIn wishListDtoIn) {
-        if (wishListRepository.existsByUserIdAndBookId(wishListDtoIn.getUserId(), wishListDtoIn.getBookId())) {
+    public WishListDtoOut addToWishList(String userName, WishListDtoIn wishListDtoIn) {
+        long userId = userRepository.findByUsername(userName).getUserId();
+        if (wishListRepository.existsByUserIdAndBookId(userId, wishListDtoIn.getBookId())) {
             throw new NameAlreadyExistsException("User already has book in wish list.");
         }
 
         WishListEntity wishListEntity = wishListMapper.toEntity(wishListDtoIn);
+        wishListEntity.setUserId(userId);
         wishListRepository.save(wishListEntity);
         return wishListMapper.toDto(wishListEntity);
     }
 
-    public List<WishListDtoOut> getUserBooks(Long userId) {
-        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserId(userId));
+    public List<WishListDtoOut> getUserBooks(String userName) {
+        UserEntity user = userRepository.findByUsername(userName);
+        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserId(user.getUserId()));
         List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
         return wishListMapper.toDtoList(wishListEntityList);
     }
 
-    public void deleteBookFromWishList(Long userId, Long bookId) {
-        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserIdAndBookId(userId, bookId));
+    public void deleteBookFromWishList(String userName, Long bookId) {
+        Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserIdAndBookId(userRepository.findByUsername(userName).getUserId(), bookId));
         List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
         wishListRepository.deleteAll(wishListEntityList);
     }

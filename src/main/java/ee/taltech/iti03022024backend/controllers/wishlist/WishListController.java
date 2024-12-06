@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,8 +28,8 @@ public class WishListController {
     )
     @ApiResponse(responseCode = "200", description = "Book has been added to wish list successfully.")
     @PostMapping()
-    public ResponseEntity<WishListDtoOut> addToWishList(@RequestBody WishListDtoIn wishListDtoIn) {
-        WishListDtoOut wishListDtoOut = wishListService.addToWishList(wishListDtoIn);
+    public ResponseEntity<WishListDtoOut> addToWishList(Principal principal, @RequestBody WishListDtoIn wishListDtoIn) {
+        WishListDtoOut wishListDtoOut = wishListService.addToWishList(principal.getName(), wishListDtoIn);
         return new ResponseEntity<>(wishListDtoOut, HttpStatus.OK);
     }
 
@@ -38,9 +39,9 @@ public class WishListController {
             description = "Returns user personal wish list using user's id."
     )
     @ApiResponse(responseCode = "200", description = "Wish list has been retrieved successfully.")
-    @GetMapping("{userId}")
-    public ResponseEntity<List<WishListDtoOut>> getWishList(@PathVariable Long userId) {
-        List<WishListDtoOut> wishListDtoOutList = wishListService.getUserBooks(userId);
+    @GetMapping()
+    public ResponseEntity<List<WishListDtoOut>> getWishList(Principal principal) {
+        List<WishListDtoOut> wishListDtoOutList = wishListService.getUserBooks(principal.getName());
         return new ResponseEntity<>(wishListDtoOutList, HttpStatus.OK);
     }
 
@@ -49,9 +50,9 @@ public class WishListController {
             description = "Removes book from users wishlist (from wish list table), based on userId and bookId."
     )
     @ApiResponse(responseCode = "204", description = "Book has been removed form wish list successfully.")
-    @DeleteMapping("{userId}/{bookId}")
-    public ResponseEntity<Void> deleteFromWishList(@PathVariable Long userId, @PathVariable Long bookId) {
-        wishListService.deleteBookFromWishList(userId, bookId);
+    @DeleteMapping("{bookId}")
+    public ResponseEntity<Void> deleteFromWishList(Principal principal, @PathVariable Long bookId) {
+        wishListService.deleteBookFromWishList(principal.getName(), bookId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
