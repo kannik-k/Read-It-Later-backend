@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.security.Principal;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class WishListController {
     @ApiResponse(responseCode = "200", description = "Book has been added to wish list successfully.")
     @PostMapping()
     public ResponseEntity<WishListDtoOut> addToWishList(Principal principal, @RequestBody WishListDtoIn wishListDtoIn) {
-        WishListDtoOut wishListDtoOut = wishListService.addToWishList(principal.getName(), wishListDtoIn);
+        WishListDtoOut wishListDtoOut = wishListService.addToWishList(Long.parseLong(principal.getName()), wishListDtoIn);
         return new ResponseEntity<>(wishListDtoOut, HttpStatus.OK);
     }
 
@@ -41,7 +42,7 @@ public class WishListController {
     @ApiResponse(responseCode = "200", description = "Wish list has been retrieved successfully.")
     @GetMapping()
     public ResponseEntity<List<WishListDtoOut>> getWishList(Principal principal) {
-        List<WishListDtoOut> wishListDtoOutList = wishListService.getUserBooks(principal.getName());
+        List<WishListDtoOut> wishListDtoOutList = wishListService.getUserBooks(Long.parseLong(principal.getName()));
         return new ResponseEntity<>(wishListDtoOutList, HttpStatus.OK);
     }
 
@@ -52,7 +53,7 @@ public class WishListController {
     @ApiResponse(responseCode = "204", description = "Book has been removed form wish list successfully.")
     @DeleteMapping("{bookId}")
     public ResponseEntity<Void> deleteFromWishList(Principal principal, @PathVariable Long bookId) {
-        wishListService.deleteBookFromWishList(principal.getName(), bookId);
+        wishListService.deleteBookFromWishList(Long.parseLong(principal.getName()), bookId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

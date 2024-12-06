@@ -53,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private Authentication buildAuthToken(Claims tokenBody) {
         return new UsernamePasswordAuthenticationToken(
-                tokenBody.getSubject(), null, List.of(new SimpleGrantedAuthority("USER"))
+                tokenBody.get("userId", Long.class), null, List.of(new SimpleGrantedAuthority("USER"))
         );
     }
 }

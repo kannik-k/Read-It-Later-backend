@@ -29,7 +29,7 @@ public class UserPreferencesController {
     @ApiResponse(responseCode = "200", description = "New genre has been added successfully.")
     @PostMapping()
     public ResponseEntity<UserPreferencesDtoOut> addGenre(Principal principal, @RequestBody UserPreferencesDtoIn userPreferencesDtoIn) {
-        UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesService.addGenre(userPreferencesDtoIn, principal.getName());
+        UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesService.addGenre(userPreferencesDtoIn, Long.parseLong(principal.getName()));
         return new ResponseEntity<>(userPreferencesDtoOut, HttpStatus.OK);
     }
 
@@ -40,7 +40,7 @@ public class UserPreferencesController {
     @ApiResponse(responseCode = "200", description = "List of preferences have been retrieved successfully.")
     @GetMapping()
     public ResponseEntity<List<UserPreferencesDtoOut>> getUserPreferences(Principal principal) {
-        List<UserPreferencesDtoOut> listOfPreferences = userPreferencesService.getGenres(principal.getName());
+        List<UserPreferencesDtoOut> listOfPreferences = userPreferencesService.getGenres(Long.parseLong(principal.getName()));
         return new ResponseEntity<>(listOfPreferences, HttpStatus.OK);
     }
 
@@ -51,7 +51,7 @@ public class UserPreferencesController {
     @ApiResponse(responseCode = "204", description = "Genre has been removed successfully.")
     @DeleteMapping("{genre}")
     public ResponseEntity<Void> deleteGenre(Principal principal, @PathVariable String genre) {
-        userPreferencesService.deleteGenre(principal.getName(), genre);
+        userPreferencesService.deleteGenre(Long.parseLong(principal.getName()), genre);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

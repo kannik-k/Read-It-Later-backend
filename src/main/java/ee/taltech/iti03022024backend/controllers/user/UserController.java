@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RequiredArgsConstructor
 @RequestMapping("api")
 @RestController
@@ -45,9 +47,9 @@ public class UserController {
             description = "Retrieve user by userId form database."
     )
     @ApiResponse(responseCode = "200", description = "User has been retrieved successfully from database.")
-    @GetMapping("user/{id}")
-    public ResponseEntity<UserDtoOut> getUserById(@PathVariable long id) {
-        UserDtoOut userDtoOut = userService.findUser(id);
+    @GetMapping("user")
+    public ResponseEntity<UserDtoOut> getUserById(Principal principal) {
+        UserDtoOut userDtoOut = userService.findUser(Long.parseLong(principal.getName()));
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
@@ -56,9 +58,9 @@ public class UserController {
             description = "User can change username that they currently have."
     )
     @ApiResponse(responseCode = "200", description = "Username has been changed successfully.")
-    @PutMapping("user/{id}/username")
-    public ResponseEntity<UserDtoOut> updateUserUsername(@PathVariable long id, @Valid @RequestBody UserDtoInUsername userDtoInUsername) {
-        UserDtoOut userDtoOut = userService.updateUserUsername(id, userDtoInUsername);
+    @PutMapping("user/username")
+    public ResponseEntity<UserDtoOut> updateUserUsername(Principal principal, @Valid @RequestBody UserDtoInUsername userDtoInUsername) {
+        UserDtoOut userDtoOut = userService.updateUserUsername(Long.parseLong(principal.getName()), userDtoInUsername);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
@@ -67,9 +69,9 @@ public class UserController {
             description = "User can change email that they currently have."
     )
     @ApiResponse(responseCode = "200", description = "Email has been changed successfully.")
-    @PutMapping("user/{id}/email")
-    public ResponseEntity<UserDtoOut> updateUserEmail(@PathVariable long id, @Valid @RequestBody UserDtoInEmail userDtoInEmail) {
-        UserDtoOut userDtoOut = userService.updateUserEmail(id, userDtoInEmail);
+    @PutMapping("user/email")
+    public ResponseEntity<UserDtoOut> updateUserEmail(Principal principal, @Valid @RequestBody UserDtoInEmail userDtoInEmail) {
+        UserDtoOut userDtoOut = userService.updateUserEmail(Long.parseLong(principal.getName()), userDtoInEmail);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
@@ -78,9 +80,9 @@ public class UserController {
             description = "User can change password that they currently have."
     )
     @ApiResponse(responseCode = "200", description = "Password has been changed successfully.")
-    @PutMapping("user/{id}/password")
-    public ResponseEntity<UserDtoOut> updateUserPassword(@PathVariable long id, @Valid @RequestBody UserPasswordChangeWrapper userPasswordChangeWrapper) {
-        UserDtoOut userDtoOut = userService.updateUserPassword(id, userPasswordChangeWrapper);
+    @PutMapping("user/password")
+    public ResponseEntity<UserDtoOut> updateUserPassword(Principal principal, @Valid @RequestBody UserPasswordChangeWrapper userPasswordChangeWrapper) {
+        UserDtoOut userDtoOut = userService.updateUserPassword(Long.parseLong(principal.getName()), userPasswordChangeWrapper);
         return new ResponseEntity<>(userDtoOut, HttpStatus.OK);
     }
 
@@ -89,9 +91,9 @@ public class UserController {
             description = "User can delete their account from database."
     )
     @ApiResponse(responseCode = "204", description = "User has been deleted successfully.")
-    @DeleteMapping("user/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
+    @DeleteMapping("user")
+    public ResponseEntity<Void> deleteUser(Principal principal) {
+        userService.deleteUser(Long.parseLong(principal.getName()));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
