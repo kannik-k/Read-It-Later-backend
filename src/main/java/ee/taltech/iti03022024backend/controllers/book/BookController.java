@@ -33,7 +33,7 @@ public class BookController {
     }
 
     @Operation(
-            summary = "Get book from database based on book id",
+            summary = "Get book from the database based on book id",
             description = "Retrieves a book from databases based on its id."
     )
     @ApiResponse(responseCode = "200", description = "Book has been retrieved from database successfully.")
