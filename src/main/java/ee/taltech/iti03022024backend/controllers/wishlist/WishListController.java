@@ -1,5 +1,6 @@
 package ee.taltech.iti03022024backend.controllers.wishlist;
 
+import ee.taltech.iti03022024backend.dto.book.BookDtoOut;
 import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoIn;
 import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoOut;
 import ee.taltech.iti03022024backend.services.wishlist.WishListService;
@@ -35,13 +36,13 @@ public class WishListController {
     //get by user id
     @Operation(
             summary = "Return wish list",
-            description = "Returns user personal wish list using user's id."
+            description = "Returns books in user's personal wish list using user's id."
     )
     @ApiResponse(responseCode = "200", description = "Wish list has been retrieved successfully.")
     @GetMapping("{userId}")
-    public ResponseEntity<List<WishListDtoOut>> getWishList(@PathVariable Long userId) {
-        List<WishListDtoOut> wishListDtoOutList = wishListService.getUserBooks(userId);
-        return new ResponseEntity<>(wishListDtoOutList, HttpStatus.OK);
+    public ResponseEntity<List<BookDtoOut>> getWishList(@PathVariable Long userId) {
+        List<BookDtoOut> bookDtoOutList = wishListService.getUserBooks(userId);
+        return new ResponseEntity<>(bookDtoOutList, HttpStatus.OK);
     }
 
     @Operation(
