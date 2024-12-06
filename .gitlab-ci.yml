@@ -9,6 +9,9 @@ variables:
 
 build:
   stage: build
+  only:
+    refs:
+      - main
   image: gradle:jdk21
   script:
     - chmod +x ./gradlew
