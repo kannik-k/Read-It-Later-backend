@@ -23,12 +23,13 @@ public class UserPreferencesService {
     private final UserPreferencesMapper userPreferencesMapper;
     private final GenreService genreService;
 
-    public UserPreferencesDtoOut addGenre(UserPreferencesDtoIn userPreferencesDtoIn) {
-        if (userPreferencesRepository.existsByUserIdAndGenreId(userPreferencesDtoIn.getUserId(), userPreferencesDtoIn.getGenreId())) {
+    public UserPreferencesDtoOut addGenre(UserPreferencesDtoIn userPreferencesDtoIn, Long userId) {
+        if (userPreferencesRepository.existsByUserIdAndGenreId(userId, userPreferencesDtoIn.getGenreId())) {
             throw new NameAlreadyExistsException("Genre already exists.");
         }
 
         UserPreferencesEntity userPreferencesEntity = userPreferencesMapper.toEntity(userPreferencesDtoIn);
+        userPreferencesEntity.setUserId(userId);
         userPreferencesRepository.save(userPreferencesEntity);
         return userPreferencesMapper.toDto(userPreferencesEntity);
     }
@@ -57,5 +58,9 @@ public class UserPreferencesService {
         }
 
         userPreferencesRepository.deleteAll(userPreferences);
+    }
+
+    public void deleteByUserId(Long userId) {
+        userPreferencesRepository.deleteByUserId(userId);
     }
 }

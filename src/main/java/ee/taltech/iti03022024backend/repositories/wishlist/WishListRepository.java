@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface WishListRepository extends JpaRepository<WishListEntity, Long>, JpaSpecificationExecutor<WishListEntity> {
 
     boolean existsByUserIdAndBookId(Long userId, Long bookId);
+    void deleteByUserId(Long userId);
 }

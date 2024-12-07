@@ -8,9 +8,12 @@ import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.user.UserMapper;
 import ee.taltech.iti03022024backend.repositories.user.UserRepository;
 import ee.taltech.iti03022024backend.security.JwtGenerator;
+import ee.taltech.iti03022024backend.services.userpreferences.UserPreferencesService;
+import ee.taltech.iti03022024backend.services.wishlist.WishListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -21,6 +24,8 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtGenerator jwtGenerator;
+    private final WishListService wishListService;
+    private  final UserPreferencesService userPreferencesService;
     private static final String USER_NONEXISTENT = "Cannot update a user that does not exist";
 
     public LoginResponseDto createUser(UserDtoIn userDtoIn) throws NameAlreadyExistsException, IncorrectInputException {
@@ -41,7 +46,7 @@ public class UserService {
         if (!userRepository.existsByUsername(loginRequestDto.getUsername())) {
             throw new NotFoundException("Username doesn't exist");
         }
-        UserEntity userEntity = userRepository.findByUsername(loginRequestDto.getUsername());
+        UserEntity userEntity = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(() -> new NotFoundException("User does not exist"));
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), userEntity.getPassword())) {
             throw new IncorrectInputException("Invalid password");
         }
@@ -83,9 +88,11 @@ public class UserService {
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }
-
+    @Transactional
     public void deleteUser(long id) throws NotFoundException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot delete a user that does not exist"));
+        wishListService.deleteByUserId(id);
+        userPreferencesService.deleteByUserId(id);
         userRepository.delete(userEntity);
     }
 }

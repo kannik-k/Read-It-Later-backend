@@ -28,12 +28,13 @@ public class WishListService {
     private final BookMapper bookMapper;
     private final GenreService genreService;
 
-    public WishListDtoOut addToWishList(WishListDtoIn wishListDtoIn) {
-        if (wishListRepository.existsByUserIdAndBookId(wishListDtoIn.getUserId(), wishListDtoIn.getBookId())) {
+    public WishListDtoOut addToWishList(Long userId, WishListDtoIn wishListDtoIn) {
+        if (wishListRepository.existsByUserIdAndBookId(userId, wishListDtoIn.getBookId())) {
             throw new NameAlreadyExistsException("User already has book in wish list.");
         }
 
         WishListEntity wishListEntity = wishListMapper.toEntity(wishListDtoIn);
+        wishListEntity.setUserId(userId);
         wishListRepository.save(wishListEntity);
         return wishListMapper.toDto(wishListEntity);
     }
@@ -57,5 +58,9 @@ public class WishListService {
         Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserIdAndBookId(userId, bookId));
         List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
         wishListRepository.deleteAll(wishListEntityList);
+    }
+
+    public void deleteByUserId(Long userId) {
+        wishListRepository.deleteByUserId(userId);
     }
 }
