@@ -54,7 +54,7 @@ public class WishListService {
 
         List<Long> booksById = slice.stream().map(WishListEntity::getBookId).toList();
         List<BookEntity> books = bookRepository.findAllById(booksById);
-        List<BookDtoOut> booksDtoOutList = books.stream().map(
+        List<BookDtoOut> booksList = books.stream().map(
                 bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
                     String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
@@ -62,7 +62,7 @@ public class WishListService {
                     return bookDtoOut;
                 })
                 .toList();
-        return new BookPageResponse(booksDtoOutList, !isLastPage);
+        return new BookPageResponse(booksList, !isLastPage);
     }
 
     public void deleteBookFromWishList(Long userId, Long bookId) {
