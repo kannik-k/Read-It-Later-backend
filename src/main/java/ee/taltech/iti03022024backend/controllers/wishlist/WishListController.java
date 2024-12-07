@@ -1,8 +1,8 @@
 package ee.taltech.iti03022024backend.controllers.wishlist;
 
-import ee.taltech.iti03022024backend.dto.book.BookDtoOut;
 import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoIn;
 import ee.taltech.iti03022024backend.dto.wishlist.WishListDtoOut;
+import ee.taltech.iti03022024backend.response.book.BookPageResponse;
 import ee.taltech.iti03022024backend.services.wishlist.WishListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.security.Principal;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api/wish_list")
@@ -42,8 +41,10 @@ public class WishListController {
     )
     @ApiResponse(responseCode = "200", description = "Wish list has been retrieved successfully.")
     @GetMapping()
-    public ResponseEntity<List<BookDtoOut>> getWishList(Principal principal) {
-        List<BookDtoOut> bookDtoOutList = wishListService.getUserBooks(Long.parseLong(principal.getName()));
+    public ResponseEntity<BookPageResponse> getWishList(Principal principal,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size) {
+        BookPageResponse bookDtoOutList = wishListService.getUserBooks(Long.parseLong(principal.getName()), page, size);
         return new ResponseEntity<>(bookDtoOutList, HttpStatus.OK);
     }
 
