@@ -3,8 +3,10 @@ package ee.taltech.iti03022024backend.dto.review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 @Schema(description = "Data transfer object for review. Client sends to server.")
 public class ReviewDtoIn {
