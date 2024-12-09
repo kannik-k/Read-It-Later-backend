@@ -2,6 +2,7 @@ package ee.taltech.iti03022024backend.controllers.userpreferences;
 
 import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoIn;
 import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoOut;
+import ee.taltech.iti03022024backend.response.book.BookPageResponse;
 import ee.taltech.iti03022024backend.services.userpreferences.UserPreferencesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,6 +43,19 @@ public class UserPreferencesController {
     public ResponseEntity<List<UserPreferencesDtoOut>> getUserPreferences(Principal principal) {
         List<UserPreferencesDtoOut> listOfPreferences = userPreferencesService.getGenres(Long.parseLong(principal.getName()));
         return new ResponseEntity<>(listOfPreferences, HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Return recommended books - books that have genres the user prefers.",
+            description = "Returns books that the user should like using user's id and their preferred genres."
+    )
+    @ApiResponse(responseCode = "200", description = "Recommended books have been retrieved successfully.")
+    @GetMapping("books")
+    public ResponseEntity<BookPageResponse> getRecommendedBooks(Principal principal,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) {
+        BookPageResponse bookDtoOutList = userPreferencesService.getRecommendedBooks(Long.parseLong(principal.getName()), page, size);
+        return new ResponseEntity<>(bookDtoOutList, HttpStatus.OK);
     }
 
     @Operation(

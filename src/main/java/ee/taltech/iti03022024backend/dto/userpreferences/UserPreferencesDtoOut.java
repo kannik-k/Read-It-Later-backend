@@ -10,6 +10,8 @@ public class UserPreferencesDtoOut {
     private Long id;
     @Schema(description = "User id, that will show which user has added the genre.", example = "4")
     private Long userId;
-    @Schema(description = "Genre name, genre id will not be displayed as a number.", example = "Mystery")
-    private String genreId;
+    @Schema(description = "Genre id.", example = "1")
+    private Long genreId;
+    @Schema(description = "Genre name.", example = "Mystery")
+    private String genre;
 }
