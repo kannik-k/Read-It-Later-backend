@@ -10,9 +10,13 @@ import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.mappers.wishlist.WishListMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
 import ee.taltech.iti03022024backend.repositories.wishlist.WishListRepository;
+import ee.taltech.iti03022024backend.response.book.BookPageResponse;
 import ee.taltech.iti03022024backend.services.genre.GenreService;
 import ee.taltech.iti03022024backend.specifications.wishlist.WishListSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +43,18 @@ public class WishListService {
         return wishListMapper.toDto(wishListEntity);
     }
 
-    public List<BookDtoOut> getUserBooks(Long userId) {
+    public BookPageResponse getUserBooks(Long userId, int page, int size) {
         Specification<WishListEntity> spec = Specification.where(WishListSpecifications.getByUserId(userId));
-        List<WishListEntity> wishListEntityList = wishListRepository.findAll(spec);
-        List<Long> booksById = wishListEntityList.stream().map(WishListEntity::getBookId).toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Slice<WishListEntity> slice = wishListRepository.findAll(spec, pageable);
+
+        boolean isLastPage = slice.isLast();
+
+        List<Long> booksById = slice.stream().map(WishListEntity::getBookId).toList();
         List<BookEntity> books = bookRepository.findAllById(booksById);
-        return books.stream().map(
+        List<BookDtoOut> booksList = books.stream().map(
                 bookEntity -> {
                     BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
                     String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
@@ -52,6 +62,7 @@ public class WishListService {
                     return bookDtoOut;
                 })
                 .toList();
+        return new BookPageResponse(booksList, !isLastPage);
     }
 
     public void deleteBookFromWishList(Long userId, Long bookId) {

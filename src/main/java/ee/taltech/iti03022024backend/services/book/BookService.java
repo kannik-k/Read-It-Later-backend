@@ -44,16 +44,18 @@ public class BookService {
         return bookDtoOut;
     }
 
-    public BookPageResponse getBooks(String author, String title, Long genreId, int page, int size) {
+    public BookPageResponse getBooks(String author, String title, Long genreId, int page, int size, String sort) {
         Specification<BookEntity> specification = Specification
                 .where(BookSpecifications.getByAuthor(author))
                 .and(BookSpecifications.getByTitle(title))
                 .and(BookSpecifications.getByGenreId(genreId));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
-        if (author != null) {
-            pageable = PageRequest.of(page, size, Sort.by("author").ascending());
-        }
+        Pageable pageable = switch (sort) {
+            case "title-desc" -> PageRequest.of(page, size, Sort.by("title").descending());
+            case "author-asc" -> PageRequest.of(page, size, Sort.by("author").ascending());
+            case "author-desc" -> PageRequest.of(page, size, Sort.by("author").descending());
+            default -> PageRequest.of(page, size, Sort.by("title").ascending());
+        };
 
         Slice<BookEntity> slice = bookRepository.findAll(specification, pageable);
 

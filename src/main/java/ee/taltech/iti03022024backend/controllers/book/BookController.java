@@ -54,10 +54,12 @@ public class BookController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "genreId", required = false) Long genreId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "title-asc") String sort
+
     ) {
 
-        BookPageResponse bookList = bookService.getBooks(author, title, genreId, page, size);
+        BookPageResponse bookList = bookService.getBooks(author, title, genreId, page, size, sort);
         return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package ee.taltech.iti03022024backend.controllers.review;
 
 import ee.taltech.iti03022024backend.dto.review.ReviewDtoIn;
+import ee.taltech.iti03022024backend.response.review.ReviewPageResponse;
 import ee.taltech.iti03022024backend.services.review.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api")
@@ -37,8 +37,10 @@ public class ReviewController {
     )
     @ApiResponse(responseCode = "200", description = "Book reviews have been retrieved successfully.")
     @GetMapping("public/review/{bookId}")
-    public ResponseEntity<List<ReviewDtoIn>> getReview(@PathVariable Long bookId) {
-        List<ReviewDtoIn> reviews = reviewService.getBookReviews(bookId);
+    public ResponseEntity<ReviewPageResponse> getReview(@PathVariable Long bookId,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") int size) {
+        ReviewPageResponse reviews = reviewService.getBookReviews(bookId, page, size);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }

@@ -4,12 +4,15 @@ import ee.taltech.iti03022024backend.dto.review.ReviewDtoIn;
 import ee.taltech.iti03022024backend.entities.review.ReviewEntity;
 import ee.taltech.iti03022024backend.mappers.review.ReviewMapper;
 import ee.taltech.iti03022024backend.repositories.review.ReviewRepository;
+import ee.taltech.iti03022024backend.response.review.ReviewPageResponse;
 import ee.taltech.iti03022024backend.specifications.review.ReviewSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -24,11 +27,13 @@ public class ReviewService {
         return reviewMapper.toDto(reviewEntity);
     }
 
-    public List<ReviewDtoIn> getBookReviews(Long bookId) {
+    public ReviewPageResponse getBookReviews(Long bookId, int page, int size) {
         Specification<ReviewEntity> spec = Specification.where(ReviewSpecifications.getByBookId(bookId));
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<ReviewEntity> slice = reviewRepository.findAll(spec, pageable);
 
-        List<ReviewEntity> reviewEntities = reviewRepository.findAll(spec);
-
-        return reviewMapper.toDtoList(reviewEntities);
+        boolean hasNextPage = slice.hasNext();
+        return new ReviewPageResponse(reviewMapper.toDtoList(slice.getContent()), hasNextPage);
     }
+
 }
