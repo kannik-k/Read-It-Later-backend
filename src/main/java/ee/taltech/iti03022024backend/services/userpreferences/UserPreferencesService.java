@@ -5,7 +5,6 @@ import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoIn;
 import ee.taltech.iti03022024backend.dto.userpreferences.UserPreferencesDtoOut;
 import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import ee.taltech.iti03022024backend.entities.usepreferences.UserPreferencesEntity;
-import ee.taltech.iti03022024backend.entities.wishlist.WishListEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
 import ee.taltech.iti03022024backend.mappers.book.BookMapper;
@@ -15,7 +14,6 @@ import ee.taltech.iti03022024backend.repositories.userpreferences.UserPreference
 import ee.taltech.iti03022024backend.response.book.BookPageResponse;
 import ee.taltech.iti03022024backend.services.genre.GenreService;
 import ee.taltech.iti03022024backend.specifications.userpreferences.UserPreferencesSpecifications;
-import ee.taltech.iti03022024backend.specifications.wishlist.WishListSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +21,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -44,7 +41,9 @@ public class UserPreferencesService {
         UserPreferencesEntity userPreferencesEntity = userPreferencesMapper.toEntity(userPreferencesDtoIn);
         userPreferencesEntity.setUserId(userId);
         userPreferencesRepository.save(userPreferencesEntity);
-        return userPreferencesMapper.toDto(userPreferencesEntity);
+        UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesMapper.toDto(userPreferencesEntity);
+        userPreferencesDtoOut.setGenre(genreService.getGenreById(userPreferencesDtoOut.getGenreId()));
+        return userPreferencesDtoOut;
     }
 
     public List<UserPreferencesDtoOut> getGenres(Long userId) {
