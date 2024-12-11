@@ -1,9 +1,11 @@
 package ee.taltech.iti03022024backend.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Schema(description = "Data transfer object for user. Server sends to client.")
 public class UserDtoOut {   // Server sends to client
     @Schema(description = "Unique user id", example = "1")

@@ -76,7 +76,6 @@ public class UserService {
         return userMapper.toDto(userEntity);
     }
 
-    // Later: passwordEncoder should be used here
     public UserDtoOut updateUserPassword(long id, UserPasswordChangeWrapper userPasswordChangeWrapper) throws NotFoundException, IncorrectInputException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NONEXISTENT));
         if (!passwordEncoder.matches(userPasswordChangeWrapper.getOldPassword(), userEntity.getPassword())) {
@@ -88,6 +87,7 @@ public class UserService {
         userRepository.save(userEntity);
         return userMapper.toDto(userEntity);
     }
+
     @Transactional
     public void deleteUser(long id) throws NotFoundException {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Cannot delete a user that does not exist"));
