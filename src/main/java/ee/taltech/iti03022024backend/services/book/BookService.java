@@ -44,6 +44,17 @@ public class BookService {
         return bookDtoOut;
     }
 
+    public List<BookDtoOut> genreIdToGenre(List<BookEntity> slice) {
+        return slice.stream()
+                .map(bookEntity -> {
+                    BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
+                    String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
+                    bookDtoOut.setGenre(bookGenre);
+                    return bookDtoOut;
+                })
+                .toList();
+    }
+
     public BookPageResponse getBooks(String author, String title, Long genreId, int page, int size, String sort) {
         Specification<BookEntity> specification = Specification
                 .where(BookSpecifications.getByAuthor(author))
@@ -61,14 +72,7 @@ public class BookService {
 
         boolean isLastPage = slice.isLast();
 
-        List<BookDtoOut> booksDtoOutList = slice.stream()
-                .map(bookEntity -> {
-                    BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
-                    String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
-                    bookDtoOut.setGenre(bookGenre);
-                    return bookDtoOut;
-                })
-                .toList();
+        List<BookDtoOut> booksDtoOutList = genreIdToGenre(slice.getContent());
 
         return new BookPageResponse(booksDtoOutList, !isLastPage);
     }
