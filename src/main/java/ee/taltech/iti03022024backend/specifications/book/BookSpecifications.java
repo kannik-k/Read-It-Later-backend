@@ -3,7 +3,6 @@ package ee.taltech.iti03022024backend.specifications.book;
 import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 
 public class BookSpecifications {
 
