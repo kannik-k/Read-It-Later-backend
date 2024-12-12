@@ -53,7 +53,7 @@ class BookControllerTest extends AbstractIntegrationTest {
     @Test
     void getBooks() throws Exception {
         mvc.perform(get("/api/public/book")
-                        .param("author", "Author 1")
+                        .param("author", "TestAuthor1")
                         .param("page", "0")
                         .param("size", "10")
                         .param("sort", "title-asc"))
@@ -69,8 +69,8 @@ class BookControllerTest extends AbstractIntegrationTest {
                         .param("size", "10")
                         .param("sort", "title-asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.books.length()").value(4))
-                .andExpect(jsonPath("$.books[0].title").value("Book Title 1"))
-                .andExpect(jsonPath("$.books[1].title").value("Book Title 3"));
+                .andExpect(jsonPath("$.books.length()").value(2))
+                .andExpect(jsonPath("$.books[0].title").value("TestTitle1"))
+                .andExpect(jsonPath("$.books[1].title").value("TestTitle3"));
     }
 }
