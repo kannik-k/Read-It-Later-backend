@@ -7,11 +7,11 @@ import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import ee.taltech.iti03022024backend.entities.usepreferences.UserPreferencesEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
-import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.mappers.userpreferences.UserPreferencesMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
 import ee.taltech.iti03022024backend.repositories.userpreferences.UserPreferencesRepository;
 import ee.taltech.iti03022024backend.response.book.BookPageResponse;
+import ee.taltech.iti03022024backend.services.book.BookService;
 import ee.taltech.iti03022024backend.services.genre.GenreService;
 import ee.taltech.iti03022024backend.specifications.userpreferences.UserPreferencesSpecifications;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserPreferencesService {
     private final UserPreferencesMapper userPreferencesMapper;
     private final GenreService genreService;
     private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
+    private final BookService bookService;
 
     public UserPreferencesDtoOut addGenre(UserPreferencesDtoIn userPreferencesDtoIn, Long userId) {
         if (userPreferencesRepository.existsByUserIdAndGenreId(userId, userPreferencesDtoIn.getGenreId())) {
@@ -69,14 +69,7 @@ public class UserPreferencesService {
         List<Long> genresById = userPreferences.stream().map(UserPreferencesEntity::getGenreId).toList();
         Slice<BookEntity> books = bookRepository.findAllByGenreIdIn(genresById, pageable);
 
-        List<BookDtoOut> booksList = books.stream().map(
-                        bookEntity -> {
-                            BookDtoOut bookDtoOut = bookMapper.toDto(bookEntity);
-                            String bookGenre = genreService.getGenreById(bookEntity.getGenreId());
-                            bookDtoOut.setGenre(bookGenre);
-                            return bookDtoOut;
-                        })
-                .toList();
+        List<BookDtoOut> booksList = bookService.genreIdToGenre(books.getContent());
         boolean isLastPage = books.isLast();
         return new BookPageResponse(booksList, !isLastPage);
     }
