@@ -8,37 +8,31 @@
 
     <changeSet id="5-insert-users" author="test">
         <insert tableName="user">
-            <column name="user_id" value="1"/>
             <column name="username" value="testuser1"/>
             <column name="password" value="password1"/>
             <column name="email" value="test1@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="2"/>
             <column name="username" value="testuser2"/>
             <column name="password" value="password2"/>
             <column name="email" value="test2@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="3"/>
             <column name="username" value="testuser3"/>
             <column name="password" value="password3"/>
             <column name="email" value="test3@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="4"/>
             <column name="username" value="testuser4"/>
             <column name="password" value="password4"/>
             <column name="email" value="test4@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="5"/>
             <column name="username" value="testuser5"/>
             <column name="password" value="password5"/>
             <column name="email" value="test5@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="6"/>
             <column name="username" value="testuser6"/>
             <column name="password" value="password6"/>
             <column name="email" value="test6@gmail.com"/>
@@ -48,37 +42,31 @@
     <!-- 7. Insert sample books -->
     <changeSet id="6-insert-books" author="test">
         <insert tableName="books">
-            <column name="book_id" value="1"/>
             <column name="title" value="TestTitle1"/>
             <column name="author" value="TestAuthor1"/>
             <column name="genre_id" value="1"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="2"/>
             <column name="title" value="TestTitle2"/>
             <column name="author" value="TestAuthor2"/>
             <column name="genre_id" value="2"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="3"/>
             <column name="title" value="TestTitle3"/>
             <column name="author" value="TestAuthor3"/>
             <column name="genre_id" value="1"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="4"/>
             <column name="title" value="TestTitle4"/>
             <column name="author" value="TestAuthor4"/>
             <column name="genre_id" value="2"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="5"/>
             <column name="title" value="TestTitle5"/>
             <column name="author" value="TestAuthor5"/>
             <column name="genre_id" value="3"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="6"/>
             <column name="title" value="TestTitle6"/>
             <column name="author" value="TestAuthor6"/>
             <column name="genre_id" value="2"/>
@@ -88,12 +76,12 @@
     <!-- 8. Insert sample user preferences -->
     <changeSet id="7-insert-user-preferences" author="test">
         <insert tableName="user_preferences">
-            <column name="user_id" value="3"/>
+            <column name="user_id" value="1"/>
             <column name="genre_id" value="1"/>
         </insert>
         <insert tableName="user_preferences">
             <column name="user_id" value="4"/>
-            <column name="genre_id" value="1"/>
+            <column name="genre_id" value="12"/>
         </insert>
         <insert tableName="user_preferences">
             <column name="user_id" value="2"/>
@@ -102,10 +90,6 @@
         <insert tableName="user_preferences">
             <column name="user_id" value="2"/>
             <column name="genre_id" value="2"/>
-        </insert>
-        <insert tableName="user_preferences">
-            <column name="user_id" value="6"/>
-            <column name="genre_id" value="12"/>
         </insert>
     </changeSet>
 
@@ -124,19 +108,5 @@
         </insert>
     </changeSet>
 
-    <changeSet id="9-insert-reviews" author="test">
-        <insert tableName="review">
-            <column name="review" value="Good"/>
-            <column name="book_id" value="1"/>
-        </insert>
-        <insert tableName="review">
-            <column name="review" value="bad"/>
-            <column name="book_id" value="1"/>
-        </insert>
-        <insert tableName="review">
-            <column name="review" value="Okay"/>
-            <column name="book_id" value="2"/>
-        </insert>
-    </changeSet>
 
 </databaseChangeLog>
