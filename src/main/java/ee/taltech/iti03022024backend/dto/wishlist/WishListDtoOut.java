@@ -1,9 +1,11 @@
 package ee.taltech.iti03022024backend.dto.wishlist;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Schema(description = "Data transfer object for wish list. Server sends to client.")
 public class WishListDtoOut {
     @Schema(description = "Unique id.", example = "1")

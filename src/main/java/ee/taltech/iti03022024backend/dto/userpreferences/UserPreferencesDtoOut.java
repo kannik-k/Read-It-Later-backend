@@ -1,9 +1,11 @@
 package ee.taltech.iti03022024backend.dto.userpreferences;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @Schema(description = "Data transfer object for user preferences. Server sends to client..")
 public class UserPreferencesDtoOut {
     @Schema(description = "Unique id", example = "1")
