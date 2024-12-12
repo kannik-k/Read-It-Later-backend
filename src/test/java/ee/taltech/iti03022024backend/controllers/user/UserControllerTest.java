@@ -61,7 +61,7 @@ class UserControllerTest extends AbstractIntegrationTest {
                         .with(user("7").password("password7").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(7L))
+                .andExpect(jsonPath("$.userId").value(7L))
                 .andExpect(jsonPath("$.username").value("existingUser"))
                 .andExpect(jsonPath("$.email").value("email@example.com"));
     }

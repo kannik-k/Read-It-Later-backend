@@ -8,46 +8,40 @@
 
     <changeSet id="5-insert-users" author="test">
         <insert tableName="user">
-            <column name="user_id" value="1"/>
             <column name="username" value="testuser1"/>
             <column name="password" value="password1"/>
             <column name="email" value="test1@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="2"/>
             <column name="username" value="testuser2"/>
             <column name="password" value="password2"/>
             <column name="email" value="test2@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="3"/>
             <column name="username" value="testuser3"/>
             <column name="password" value="password3"/>
             <column name="email" value="test3@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="4"/>
             <column name="username" value="testuser4"/>
             <column name="password" value="password4"/>
             <column name="email" value="test4@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="5"/>
             <column name="username" value="testuser5"/>
             <column name="password" value="password5"/>
             <column name="email" value="test5@gmail.com"/>
         </insert>
         <insert tableName="user">
-            <column name="user_id" value="6"/>
             <column name="username" value="testuser6"/>
             <column name="password" value="password6"/>
             <column name="email" value="test6@gmail.com"/>
         </insert>
-        <insert tableName="users"> <column name="id" value="1"/>
-            <column name="user_id" value="7"/>
+        <insert tableName="user">
             <column name="username" value="existingUser"/>
             <column name="password" value="password7"/>
-            <column name="email" value="email@example.com"/> </insert>
+            <column name="email" value="email@example.com"/>
+        </insert>
     </changeSet>
 
     <!-- 7. Insert sample books -->
