@@ -57,37 +57,6 @@ class ReviewServiceTest {
     }
 
     @Test
-    void createReview_ReviewDtoNull_ThrowException() {
-        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(null));
-    }
-
-    @Test
-    void createReview_ReviewDtoHasNoText_ThrowException() {
-        ReviewDtoIn review = ReviewDtoIn.builder().bookId(1L).review("").build();
-        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
-    }
-
-    @Test
-    void createReview_ReviewIsNull_ThrowException() {
-        ReviewDtoIn review = ReviewDtoIn.builder().bookId(2L).review(null).build();
-
-        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
-    }
-
-    @Test
-    void createReview_ReviewBookIdNull_ThrowException() {
-        ReviewDtoIn review = ReviewDtoIn.builder().bookId(0).review("review").build();
-
-        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
-    }
-
-    @Test void createReview_BookIdNull_ThrowException() {
-        ReviewDtoIn review = ReviewDtoIn.builder().bookId(0L).review("Test review").build();
-        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
-    }
-
-
-    @Test
     void getBookReviews() {
         // given
         ReviewDtoIn firstReview = ReviewDtoIn.builder().bookId(1L).review("Test review the first").build();

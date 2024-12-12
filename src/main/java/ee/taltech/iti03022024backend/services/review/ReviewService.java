@@ -23,14 +23,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public ReviewDtoIn createReview(ReviewDtoIn reviewDtoIn) {
-        if (reviewDtoIn == null || reviewDtoIn.getReview() == null || reviewDtoIn.getReview().isEmpty()) {
-            throw new IncorrectInputException("Review input is missing or empty.");
-        }
-
-        if (reviewDtoIn.getBookId() == 0){
-            throw new IncorrectInputException("BookId cannot be zero.");
-        }
-
         ReviewEntity reviewEntity = reviewMapper.toEntity(reviewDtoIn);
         reviewRepository.save(reviewEntity);
         return reviewMapper.toDto(reviewEntity);
