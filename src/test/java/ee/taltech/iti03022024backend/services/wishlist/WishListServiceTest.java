@@ -47,7 +47,7 @@ private BookMapper bookMapper;
 private WishListService wishListService;
 
     @Test
-    void addToWishList() {
+    void addToWishList_whenCorrect_returnsWishListDto() {
         // Given
         Long userId = 1L;
         Long bookId = 100L;
@@ -92,7 +92,7 @@ private WishListService wishListService;
     }
 
     @Test
-    void getUserBooks() {
+    void getUserBooks_whenCorrect_returnsBooks() {
         // Given
         Long userId = 1L;
         int page = 0;
@@ -140,7 +140,7 @@ private WishListService wishListService;
     }
 
     @Test
-    void getUserBooks_noBooksAddedYet() {
+    void getUserBooks_whenNoBooksAddedYet_returnsEmptyResponse() {
         // Given
         Long userId = 1L;
         int page = 0;

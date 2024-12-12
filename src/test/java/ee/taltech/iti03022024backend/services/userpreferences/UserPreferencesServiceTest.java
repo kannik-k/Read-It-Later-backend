@@ -53,7 +53,7 @@ class UserPreferencesServiceTest {
 
 
     @Test
-    void addGenre() {
+    void addGenre_whenCorrect_returnsGenre() {
         // Given
         Long userId = 1L;
         UserPreferencesDtoIn inputDto = new UserPreferencesDtoIn();
@@ -94,7 +94,7 @@ class UserPreferencesServiceTest {
 
 
     @Test
-    void getGenres() {
+    void getGenres_whenCorrect_returnsGenres() {
         // Given
         Long userId = 1L;
         UserPreferencesEntity entity = new UserPreferencesEntity();
@@ -235,7 +235,7 @@ class UserPreferencesServiceTest {
 
 
     @Test
-    void deleteGenre() {
+    void deleteGenre_whenCorrect_removesGenre() {
         // Given
         Long userId = 1L;
         String genreName = "Fantasy";
