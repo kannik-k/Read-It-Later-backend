@@ -41,10 +41,23 @@ class UserControllerTest extends AbstractIntegrationTest {
 
     @Test
     void login() throws Exception {
+        String userDtoIn = """
+        {
+            "username": "newUser",
+            "password": "newPassword",
+            "passwordAgain": "newPassword",
+            "email": "newuser@example.com"
+        }
+        """;
+
+        mvc.perform(post("/api/public/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userDtoIn));
+
         String loginRequest = """
         {
-            "username": "existingUser",
-            "password": "password7"
+            "username": "newUser",
+            "password": "newPassword"
         }
         """;
 
@@ -100,6 +113,19 @@ class UserControllerTest extends AbstractIntegrationTest {
 
     @Test
     void updateUserPassword() throws Exception {
+        String userDtoIn = """
+        {
+            "username": "newUser",
+            "password": "oldPassword",
+            "passwordAgain": "oldPassword",
+            "email": "newuser@example.com"
+        }
+        """;
+
+        mvc.perform(post("/api/public/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userDtoIn));
+
         String updatePassword = """
         {
             "oldPassword": "oldPassword",
@@ -109,7 +135,7 @@ class UserControllerTest extends AbstractIntegrationTest {
         """;
 
         mvc.perform(put("/api/user/password")
-                        .with(user("7").password("oldPassword").roles("USER"))
+                        .with(user("8").password("oldPassword").roles("USER"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatePassword))
                 .andExpect(status().isOk());
