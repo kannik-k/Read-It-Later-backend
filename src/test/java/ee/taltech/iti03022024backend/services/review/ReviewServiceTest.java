@@ -2,6 +2,7 @@ package ee.taltech.iti03022024backend.services.review;
 
 import ee.taltech.iti03022024backend.dto.review.ReviewDtoIn;
 import ee.taltech.iti03022024backend.entities.review.ReviewEntity;
+import ee.taltech.iti03022024backend.exceptions.IncorrectInputException;
 import ee.taltech.iti03022024backend.mappers.review.ReviewMapper;
 import ee.taltech.iti03022024backend.mappers.review.ReviewMapperImpl;
 import ee.taltech.iti03022024backend.repositories.review.ReviewRepository;
@@ -51,7 +52,38 @@ class ReviewServiceTest {
         // then
         then(reviewRepository).should().save(any(ReviewEntity.class));
         then(reviewMapper).should().toEntity(any(ReviewDtoIn.class));
+        then(reviewMapper).should().toDto(any(ReviewEntity.class));
         assertEquals(ReviewDtoIn.builder().bookId(1L).review("Test review").build(), result);
+    }
+
+    @Test
+    void createReview_ReviewDtoNull_ThrowException() {
+        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(null));
+    }
+
+    @Test
+    void createReview_ReviewDtoHasNoText_ThrowException() {
+        ReviewDtoIn review = ReviewDtoIn.builder().bookId(1L).review("").build();
+        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
+    }
+
+    @Test
+    void createReview_ReviewIsNull_ThrowException() {
+        ReviewDtoIn review = ReviewDtoIn.builder().bookId(2L).review(null).build();
+
+        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
+    }
+
+    @Test
+    void createReview_ReviewBookIdNull_ThrowException() {
+        ReviewDtoIn review = ReviewDtoIn.builder().bookId(0).review("review").build();
+
+        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
+    }
+
+    @Test void createReview_BookIdNull_ThrowException() {
+        ReviewDtoIn review = ReviewDtoIn.builder().bookId(0L).review("Test review").build();
+        assertThrows(IncorrectInputException.class, () -> reviewService.createReview(review));
     }
 
 
@@ -84,5 +116,35 @@ class ReviewServiceTest {
         assertFalse(result.isHasNextPage());
         assertEquals(firstReview.getReview(), result.getReviews().get(0).getReview());
         assertEquals(secondReview.getReview(), result.getReviews().get(1).getReview());
+    }
+
+    @Test
+    void getBookReviews_BookIdIsNull_ThrowException() {
+        assertThrows(IncorrectInputException.class, () -> reviewService.getBookReviews(null, 0, 10));
+    }
+
+    @Test
+    void getBookReviews_NegativePage_ThrowException() {
+        assertThrows(IncorrectInputException.class, () -> reviewService.getBookReviews(1L, -1, 10));
+    }
+
+    @Test
+    void getBookReviews_SizeLessThanZero_ThrowException() {
+        assertThrows(IncorrectInputException.class, () -> reviewService.getBookReviews(1L, 0, -1));
+    }
+
+    @Test void getBookReviews_PageGreaterThanTotalPages_ReturnsEmptyResult() {
+        List<ReviewEntity> reviewList = List.of();
+        Page<ReviewEntity> reviewPage = new PageImpl<>(reviewList, PageRequest.of(2, 10), reviewList.size());
+
+        when(reviewRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(reviewPage);
+
+
+        var result = reviewService.getBookReviews(1L, 2, 10); then(reviewRepository).should().findAll(any(Specification.class), any(Pageable.class));
+
+        then(reviewMapper).should().toDtoList(anyList());
+        assertNotNull(result);
+        assertTrue(result.getReviews().isEmpty());
+        assertFalse(result.isHasNextPage());
     }
 }
