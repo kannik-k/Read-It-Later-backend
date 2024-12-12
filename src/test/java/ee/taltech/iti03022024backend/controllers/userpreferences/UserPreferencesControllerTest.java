@@ -30,7 +30,7 @@ class UserPreferencesControllerTest extends AbstractIntegrationTest {
     @Test
     void getUserPreferences_whenCorrect_returnsPreferences() throws Exception {
         mvc.perform(get("/api/user_preferences")
-                        .with(user("1").password("password1").roles("USER"))) // Simulate authenticated user with ID "1"
+                        .with(user("1").password("password1").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
@@ -43,7 +43,7 @@ class UserPreferencesControllerTest extends AbstractIntegrationTest {
     @Test
     void getUserPreferences_withNoPreferencesAdded_returnsEmptyResponse() throws Exception {
         mvc.perform(get("/api/user_preferences")
-                        .with(user("3").password("password3").roles("USER"))) // Simulate authenticated user with ID "1"
+                        .with(user("3").password("password3").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
