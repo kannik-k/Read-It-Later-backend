@@ -132,22 +132,4 @@
         </insert>
     </changeSet>
 
-    <changeSet id="10-insert-books" author="test">
-    <insert tableName="books">
-        <column name="title" value="Book Title 1"/>
-        <column name="author" value="Author 1"/>
-        <column name="genre_id" value="1"/>
-    </insert>
-    <insert tableName="books">
-        <column name="title" value="Book Title 2"/>
-        <column name="author" value="Author 2"/>
-        <column name="genre_id" value="2"/>
-    </insert>
-    <insert tableName="books">
-        <column name="title" value="Book Title 3"/>
-        <column name="author" value="Author 3"/>
-        <column name="genre_id" value="1"/>
-    </insert>
-    </changeSet>
-
 </databaseChangeLog>

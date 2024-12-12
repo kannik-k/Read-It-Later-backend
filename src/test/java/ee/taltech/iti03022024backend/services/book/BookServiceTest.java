@@ -184,5 +184,96 @@ class BookServiceTest {
         assertFalse(result.isHasNextPage());
     }
 
+    @Test
+    void testGetBooks_sortByTitleAsc() {
+        String author = "Author Name";
+        String title = "Book Title";
+        Long genreId = 1L;
+        int page = 0;
+        int size = 10;
+        String sort = "title-desc";
+
+        BookEntity bookEntity1 = new BookEntity();
+        bookEntity1.setAuthor(author);
+        bookEntity1.setTitle("Book Title A");
+        bookEntity1.setGenreId(genreId);
+
+        BookEntity bookEntity2 = new BookEntity();
+        bookEntity2.setAuthor(author);
+        bookEntity2.setTitle("Book Title Z");
+        bookEntity2.setGenreId(genreId);
+
+        List<BookEntity> bookEntities = List.of(bookEntity1, bookEntity2);
+        Page<BookEntity> bookPage = new PageImpl<>(bookEntities);
+
+        BookDtoOut bookDtoOut1 = BookDtoOut.builder().bookId(1L).author(author).title("Book Title A").genre("Genre Name").build();
+        BookDtoOut bookDtoOut2 = BookDtoOut.builder().bookId(2L).author(author).title("Book Title Z").genre("Genre Name").build();
+
+        when(bookRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(bookPage);
+        when(bookMapper.toDto(bookEntity1)).thenReturn(bookDtoOut1);
+        when(bookMapper.toDto(bookEntity2)).thenReturn(bookDtoOut2);
+        when(genreService.getGenreById(genreId)).thenReturn("Genre Name");
+
+        BookPageResponse result = bookService.getBooks(author, title, genreId, page, size, sort);
+
+        verify(bookRepository).findAll(any(Specification.class), any(Pageable.class));
+        verify(bookMapper).toDto(bookEntity1);
+        verify(bookMapper).toDto(bookEntity2);
+        verify(genreService, times(2)).getGenreById(genreId);
+
+        assertNotNull(result);
+        assertEquals(2, result.getBooks().size());
+        assertEquals("Genre Name", result.getBooks().get(0).getGenre());
+        assertEquals("Book Title A", result.getBooks().get(0).getTitle());
+        assertEquals("Book Title Z", result.getBooks().get(1).getTitle());
+
+        assertFalse(result.isHasNextPage());
+    }
+
+    @Test
+    void testGetBooks_sortByAuthorAsc() {
+        String author1 = "Author A";
+        String author2 = "Author Z";
+        Long genreId = 1L;
+        int page = 0;
+        int size = 10;
+        String sort = "author-asc";
+
+        BookEntity bookEntity1 = new BookEntity();
+        bookEntity1.setAuthor(author1);
+        bookEntity1.setTitle("Book by Author A");
+        bookEntity1.setGenreId(genreId);
+
+        BookEntity bookEntity2 = new BookEntity();
+        bookEntity2.setAuthor(author2);
+        bookEntity2.setTitle("Book by Author Z");
+        bookEntity2.setGenreId(genreId);
+
+        List<BookEntity> bookEntities = List.of(bookEntity1, bookEntity2);
+        Page<BookEntity> bookPage = new PageImpl<>(bookEntities);
+
+        BookDtoOut bookDtoOut1 = BookDtoOut.builder().bookId(1L).author(author1).title("Book by Author A").genre("Genre Name").build();
+        BookDtoOut bookDtoOut2 = BookDtoOut.builder().bookId(2L).author(author2).title("Book by Author Z").genre("Genre Name").build();
+
+        when(bookRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(bookPage);
+        when(bookMapper.toDto(bookEntity1)).thenReturn(bookDtoOut1);
+        when(bookMapper.toDto(bookEntity2)).thenReturn(bookDtoOut2);
+        when(genreService.getGenreById(genreId)).thenReturn("Genre Name");
+
+        BookPageResponse result = bookService.getBooks("", "", genreId, page, size, sort);
+
+        verify(bookRepository).findAll(any(Specification.class), any(Pageable.class));
+        verify(bookMapper).toDto(bookEntity1);
+        verify(bookMapper).toDto(bookEntity2);
+        verify(genreService, times(2)).getGenreById(genreId);
+
+        assertNotNull(result);
+        assertEquals(2, result.getBooks().size());
+        assertEquals("Genre Name", result.getBooks().get(0).getGenre());
+        assertEquals("Book by Author A", result.getBooks().get(0).getTitle());
+        assertEquals("Book by Author Z", result.getBooks().get(1).getTitle());
+
+        assertFalse(result.isHasNextPage());
+    }
 
 }
