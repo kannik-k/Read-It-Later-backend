@@ -37,6 +37,11 @@
             <column name="password" value="password6"/>
             <column name="email" value="test6@gmail.com"/>
         </insert>
+        <insert tableName="user">
+            <column name="username" value="existingUser"/>
+            <column name="password" value="password7"/>
+            <column name="email" value="email@example.com"/>
+        </insert>
     </changeSet>
 
     <!-- 7. Insert sample books -->
