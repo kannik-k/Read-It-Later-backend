@@ -47,37 +47,31 @@
     <!-- 7. Insert sample books -->
     <changeSet id="6-insert-books" author="test">
         <insert tableName="books">
-            <column name="book_id" value="1"/>
             <column name="title" value="TestTitle1"/>
             <column name="author" value="TestAuthor1"/>
             <column name="genre_id" value="1"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="2"/>
             <column name="title" value="TestTitle2"/>
             <column name="author" value="TestAuthor2"/>
             <column name="genre_id" value="2"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="3"/>
             <column name="title" value="TestTitle3"/>
             <column name="author" value="TestAuthor3"/>
             <column name="genre_id" value="1"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="4"/>
             <column name="title" value="TestTitle4"/>
             <column name="author" value="TestAuthor4"/>
             <column name="genre_id" value="2"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="5"/>
             <column name="title" value="TestTitle5"/>
             <column name="author" value="TestAuthor5"/>
             <column name="genre_id" value="3"/>
         </insert>
         <insert tableName="books">
-            <column name="book_id" value="6"/>
             <column name="title" value="TestTitle6"/>
             <column name="author" value="TestAuthor6"/>
             <column name="genre_id" value="2"/>
@@ -139,20 +133,20 @@
     </changeSet>
 
     <changeSet id="10-insert-books" author="test">
-    <insert tableName="book">
+    <insert tableName="books">
         <column name="title" value="Book Title 1"/>
         <column name="author" value="Author 1"/>
-        <column name="genreId" value="1"/>
+        <column name="genre_id" value="1"/>
     </insert>
-    <insert tableName="book">
+    <insert tableName="books">
         <column name="title" value="Book Title 2"/>
         <column name="author" value="Author 2"/>
-        <column name="genreId" value="2"/>
+        <column name="genre_id" value="2"/>
     </insert>
-    <insert tableName="book">
+    <insert tableName="books">
         <column name="title" value="Book Title 3"/>
         <column name="author" value="Author 3"/>
-        <column name="genreId" value="1"/>
+        <column name="genre_id" value="1"/>
     </insert>
     </changeSet>
 

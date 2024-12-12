@@ -1,5 +1,6 @@
 package ee.taltech.iti03022024backend.controllers.book;
 
+import ee.taltech.iti03022024backend.AbstractIntegrationTest;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@Transactional
 @AutoConfigureMockMvc
-class BookControllerTest {
+@Transactional
+class BookControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
@@ -30,21 +32,22 @@ class BookControllerTest {
         """;
 
         mvc.perform(post("/api/book")
+                        .with(user("1").password("password1").roles("USER"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bookDtoIn))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("New Book Title"))
                 .andExpect(jsonPath("$.author").value("New Author"))
-                .andExpect(jsonPath("$.genreId").value(1));
+                .andExpect(jsonPath("$.genre").value("Fiction"));
     }
 
     @Test
     void getBookById() throws Exception {
         mvc.perform(get("/api/public/book/search_by_id/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Book Title 1"))
-                .andExpect(jsonPath("$.author").value("Author 1"))
-                .andExpect(jsonPath("$.genreId").value(1));
+                .andExpect(jsonPath("$.title").value("TestTitle1"))
+                .andExpect(jsonPath("$.author").value("TestAuthor1"))
+                .andExpect(jsonPath("$.genre").value("Fiction"));
     }
 
     @Test
@@ -55,7 +58,7 @@ class BookControllerTest {
                         .param("size", "10")
                         .param("sort", "title-asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(3));
+                .andExpect(jsonPath("$.books.length()").value(1));
     }
 
     @Test
@@ -66,8 +69,8 @@ class BookControllerTest {
                         .param("size", "10")
                         .param("sort", "title-asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.content[0].title").value("Book Title 1"))
-                .andExpect(jsonPath("$.content[1].title").value("Book Title 3"));
+                .andExpect(jsonPath("$.books.length()").value(4))
+                .andExpect(jsonPath("$.books[0].title").value("Book Title 1"))
+                .andExpect(jsonPath("$.books[1].title").value("Book Title 3"));
     }
 }
