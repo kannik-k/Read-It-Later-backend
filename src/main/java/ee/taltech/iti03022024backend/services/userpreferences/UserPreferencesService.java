@@ -41,7 +41,9 @@ public class UserPreferencesService {
         UserPreferencesEntity userPreferencesEntity = userPreferencesMapper.toEntity(userPreferencesDtoIn);
         userPreferencesEntity.setUserId(userId);
         userPreferencesRepository.save(userPreferencesEntity);
-        return userPreferencesMapper.toDto(userPreferencesEntity);
+        UserPreferencesDtoOut userPreferencesDtoOut = userPreferencesMapper.toDto(userPreferencesEntity);
+        userPreferencesDtoOut.setGenre(genreService.getGenreById(userPreferencesDtoOut.getGenreId()));
+        return userPreferencesDtoOut;
     }
 
     public List<UserPreferencesDtoOut> getGenres(Long userId) {

@@ -81,12 +81,12 @@
     <!-- 8. Insert sample user preferences -->
     <changeSet id="7-insert-user-preferences" author="test">
         <insert tableName="user_preferences">
-            <column name="user_id" value="3"/>
+            <column name="user_id" value="1"/>
             <column name="genre_id" value="1"/>
         </insert>
         <insert tableName="user_preferences">
             <column name="user_id" value="4"/>
-            <column name="genre_id" value="1"/>
+            <column name="genre_id" value="12"/>
         </insert>
         <insert tableName="user_preferences">
             <column name="user_id" value="2"/>
@@ -95,10 +95,6 @@
         <insert tableName="user_preferences">
             <column name="user_id" value="2"/>
             <column name="genre_id" value="2"/>
-        </insert>
-        <insert tableName="user_preferences">
-            <column name="user_id" value="6"/>
-            <column name="genre_id" value="12"/>
         </insert>
     </changeSet>
 

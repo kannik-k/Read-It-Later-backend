@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-@Schema(description = "Data transfer object for book. Server sends to client.")
+@Builder
+@Schema(description = "Data transfer object for book. Server sends to client..")
 public class BookDtoOut {
     @Schema(description = "Unique book id", example = "1")
     private long bookId;
