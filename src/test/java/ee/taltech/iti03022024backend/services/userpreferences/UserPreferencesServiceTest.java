@@ -7,11 +7,11 @@ import ee.taltech.iti03022024backend.entities.book.BookEntity;
 import ee.taltech.iti03022024backend.entities.usepreferences.UserPreferencesEntity;
 import ee.taltech.iti03022024backend.exceptions.NameAlreadyExistsException;
 import ee.taltech.iti03022024backend.exceptions.NotFoundException;
-import ee.taltech.iti03022024backend.mappers.book.BookMapper;
 import ee.taltech.iti03022024backend.mappers.userpreferences.UserPreferencesMapper;
 import ee.taltech.iti03022024backend.repositories.books.BookRepository;
 import ee.taltech.iti03022024backend.repositories.userpreferences.UserPreferencesRepository;
 import ee.taltech.iti03022024backend.response.book.BookPageResponse;
+import ee.taltech.iti03022024backend.services.book.BookService;
 import ee.taltech.iti03022024backend.services.genre.GenreService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,9 +42,9 @@ class UserPreferencesServiceTest {
     @Mock
     private GenreService genreService;
     @Mock
-    private BookRepository bookRepository;
+    private BookService bookService;
     @Mock
-    private BookMapper bookMapper;
+    private BookRepository bookRepository;
     @Spy
     private UserPreferencesMapper userPreferencesMapper;
 
@@ -162,10 +162,12 @@ class UserPreferencesServiceTest {
 
         when(userPreferencesRepository.findAll(any(Specification.class))).thenReturn(preferences);
         when(bookRepository.findAllByGenreIdIn(anyList(), any(Pageable.class))).thenReturn(bookSlice);
-        when(genreService.getGenreById(10L)).thenReturn("Fantasy");
-        when(genreService.getGenreById(20L)).thenReturn("Sci-Fi");
-        when(bookMapper.toDto(book1)).thenReturn(BookDtoOut.builder().bookId(1).genre("Fantasy").build());
-        when(bookMapper.toDto(book2)).thenReturn(BookDtoOut.builder().bookId(2).genre("Sci-Fi").build());
+        when(bookService.genreIdToGenre(List.of(book1, book2)))
+                .thenReturn(List.of(
+                        BookDtoOut.builder().bookId(1).genre("Fantasy").build(),
+                        BookDtoOut.builder().bookId(2).genre("Sci-Fi").build()
+                ));
+
 
         // When
         BookPageResponse response = userPreferencesService.getRecommendedBooks(userId, page, size);
@@ -176,6 +178,9 @@ class UserPreferencesServiceTest {
         assertTrue(response.isHasNextPage());
         assertEquals("Fantasy", response.getBooks().get(0).getGenre());
         assertEquals("Sci-Fi", response.getBooks().get(1).getGenre());
+
+        // Verify interactions
+        verify(bookService, times(1)).genreIdToGenre(anyList());
         verify(bookRepository, times(1)).findAllByGenreIdIn(anyList(), any(Pageable.class));
     }
 
