@@ -1,8 +1,10 @@
 package ee.taltech.iti03022024backend.dto.book;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 @Schema(description = "Data transfer object for book. Server sends to client.")
 public class BookDtoOut {
